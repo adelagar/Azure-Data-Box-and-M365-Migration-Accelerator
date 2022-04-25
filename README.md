@@ -1,0 +1,2 @@
+# Azure-Data-Box-and-M365-Migration-Accelerator
+A solution accelerator to expedite the migration of OneDrive data to M365 leveraging Azure. Potential use cases to import or export PST files from M365. The solution can be leveraged across multiple industry verticals such as DoD, Federal Government, State and Local Government, Financial Services. and Commercial customers. Solution is provided "as is" for general use.
