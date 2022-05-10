@@ -9,11 +9,13 @@ The FastTrack for Azure (FTA) Team and FastTrack M365 (FT M365) Team have co-aut
 
 **Solution and Framework Description**
 The solution framework consists of identifying a potential migration project that might be impacted by the volume of data to be migrated over a low bandwidth network, or security regulations that do not allow a clear path to the internet from a customer’s internal network. Customers and partners can use this solution accelerator to establish a Migration Factory in Azure with a preconfigured Azure Resource Manager Template. The solution is designed to assist in connecting either to on-premises, attaching the environment to an existing Azure subscription, or leave it as a disconnected platform from on-premises providing flexibility for various migration scenarios. The solution includes steps that assist in ordering an Azure Data Box and copying the data for export into the Azure Migration Factory storage accounts. Once the data was seeded in the Azure storage accounts, Migration Manager can be used to complete the transfer from Azure to OneDrive for business.
+
 * The graphic below illustrates when to use this solution accelerator over conventional methods
+ <img src="/Images/WhenToUseDataBox.png" alt="When to Use DataBox" title="When to Use DataBox">
  
 * Below is a high-level overview of the Migration Factory solution
+ <img src="/Images/High-level_Arch.png" alt="High-Level Architecture" title="High-Level Architecture">
  
-
 
 **Benefit from the Solution Accelerator**
 The following are the benefits that could be gained from the proposed program
