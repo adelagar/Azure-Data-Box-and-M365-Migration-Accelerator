@@ -35,6 +35,7 @@ Below please find the solution accelerator deployment buttons for either Azure C
 **High Level Azure Migration Factory Deployment Solution Overview**
 
 Below please find a graphic depicting what the output of the depolyment into an Azure subscription would look like. In this scenario we just deployed three virtual machines, a storage account, a virtual network, a network security group, and a route table. Please note the M365 Migration Manager still needs to be deployed on the virtual machine.
+
 <img src="/Images/AzureMigrationFactory.png" alt="High-Level Azure Migration Architecture" title="High-Level Azure Migration Architecture">
 
 #### Microsoft Azure Commercial Click Here: ####
