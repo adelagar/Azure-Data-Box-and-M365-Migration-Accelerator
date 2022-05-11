@@ -30,7 +30,7 @@ The following are the benefits that could be gained from the proposed program
 
 **Deploy the M365 OneDrive Azure Migration Factory**
 
-Below please find the solution accelerator deployment buttons for either Azure Commercial or Azure Us Government
+Below please find the solution accelerator deployment buttons for either Azure Commercial or Azure Us Government. Please note that the inputs within the JSON template can be changed based on you particular scenario. Please note We are adding a dash and an ordinal number to the virtual machine hostname. Example if you were to deploy two virtual machines they would appear in your Azure subscription as M365-MIGVM-1 and M365-MIGVM-2. The hostnames can be whatever you want to comply with your naming standards. Please be aware that you are only limited to 15 characters for the virtual machine hostname.   
 
 #### Microsoft Azure Commercial Click Here: ####
 [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fadelagar%2FAzure-Data-Box-and-M365-Migration-Accelerator%2Fmain%2Fazuredeploy.json)
