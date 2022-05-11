@@ -32,14 +32,16 @@ The following are the benefits that could be gained from the proposed program
 
 Below please find the solution accelerator deployment buttons for either Azure Commercial or Azure Us Government. Please note that the inputs within the JSON template can be changed based on you particular scenario. We are also adding a dash and an ordinal number to the virtual machine hostname. Example if you were to deploy two virtual machines they would appear in your Azure subscription as M365-MIGVM-1 and M365-MIGVM-2. The hostnames can be whatever you want to comply with your naming standards. Please be aware that you are limited to 15 characters for the virtual machine hostname. You have the option to deploy multiple virtual machines per your requirements.  
 
+**High Level Azure Migration Deployment Solution Overview**
+
+Below please find a graphic depicting what the output of the depolyment into Azure would look like. In this scenario we just deployed three virtual machines, a storage account, a virtual network, and a route table.
+<img src="/Images/AzureMigrationFactory.png" alt="High-Level Azure Migration Architecture" title="High-Level Azure Migration Architecture">
+
 #### Microsoft Azure Commercial Click Here: ####
 [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fadelagar%2FAzure-Data-Box-and-M365-Migration-Accelerator%2Fmain%2Fazuredeploy.json)
 
 #### Microsoft Azure Government Click Here: ####
 [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.us/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fadelagar%2FAzure-Data-Box-and-M365-Migration-Accelerator%2Fmain%2Fazuredeploy.json) 
 
-**High Level Azure Migration Deployment Solution Overview**
 
-Below please find a graphic depicting what the output of the depolyment into Azure would look like. In this scenario we just deployed three virtual machines, a storage account, a virtual network, and a route table.
-<img src="/Images/AzureMigrationFactory.png" alt="High-Level Azure Migration Architecture" title="High-Level Azure Migration Architecture">
 
