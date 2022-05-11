@@ -40,6 +40,6 @@ Below please find the solution accelerator deployment buttons for either Azure C
 
 **High Level Azure Migration Solution Overview**
 
-Below please find a graphic depicting what the output of what the depolyed solution into Azure would look like
+Below please find a graphic depicting what the output of the depolyment into Azure would look like
 <img src="/Images/AzureMigrationFactory.png" alt="High-Level Azure Migration Architecture" title="High-Level Azure Migration Architecture">
 
