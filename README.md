@@ -16,6 +16,9 @@ The solution framework consists of identifying a potential migration project tha
 * The graphic below illustrates when to use this solution accelerator over conventional methods
  <img src="/Images/WhenToUseDataBox.png" alt="When to Use DataBox" title="When to Use DataBox">
  
+ 
+ [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://github.com/adelagar/Azure-Data-Box-and-M365-Migration-Accelerator/?ptmpl=parameters.azuredeploy.json)
+ 
 * Below is a high-level overview of the Migration Factory solution
  <img src="/Images/High-level_Arch.png" alt="High-Level Architecture" title="High-Level Architecture">
  
