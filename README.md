@@ -38,8 +38,6 @@ Below please find a graphic depicting what the output of the depolyment into an 
 
 <img src="/Images/AzureMigrationFactory.png" alt="High-Level Azure Migration Architecture" title="High-Level Azure Migration Architecture">
 
-#### Microsoft Azure Commercial Click Here: ####  [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fadelagar%2FAzure-Data-Box-and-M365-Migration-Accelerator%2Fmain%2Fazuredeploy.json)
-
 #### Microsoft Azure Commercial Click Here: ####
 [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fadelagar%2FAzure-Data-Box-and-M365-Migration-Accelerator%2Fmain%2Fazuredeploy.json)
 
