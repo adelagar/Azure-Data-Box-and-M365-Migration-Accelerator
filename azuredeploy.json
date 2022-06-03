@@ -1,446 +1,689 @@
 {
-    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
-    "contentVersion": "9.0.0.0",
-    "parameters": {
-
-        "virtualNetworkName": {
-            "type": "string",
-            "defaultValue": "<Enter the name-of-your-vnet>",
-            "metadata": {
-                "description": "The name of the Hub virtual network provisioned for the deployment"
-            }
-        },
-        "addressPrefix": {
-            "type": "string",
-            "defaultValue": "10.230.0.0/21",
-            "metadata": {
-                "description": "Hub Virtual Network address CIDR."
-            }
-        },
-        
-        "JumpHostSubnetName": {
-            "type": "string",
-            "defaultValue": "JUMPHOST-SUBNET",
-            "metadata": {
-                "description": "Jump Host Subnet "
-            }
-        },
-        "PrivateEndpointSubnetName": {
-            "type": "string",
-            "defaultValue": "PRIVATE-ENDPOINT-SUBNET",
-            "metadata": {
-                "description": "Private Endpoint Subnet for Storage"
-            }
-        },
-        
-        "JumpHostSubnetPrefix": {
-            "type": "string",
-            "defaultValue": "10.230.0.0/24",
-            "metadata": {
-                "description": "Enter the CIDR address for the JUMP Host Subnet"
-            }
-        },
-        "BastionSubnetPrefix": {
-            "type": "string",
-            "defaultValue": "10.230.1.0/27",
-            "metadata": {
-                "description": "CIDR address for the Azure Bastion subnet must be a /27"
-            }
-        },
-        "PrivateEndpointSubnetPrefix": {
-            "type": "string",
-            "defaultValue": "10.230.2.0/27",
-            "metadata": {
-                "description": "CIDR address for the Azure Bastion subnet must be a /27"
-            }
-        },
-        "GatewaySubnetPrefix": {
-            "type": "string",
-            "defaultValue": "10.230.3.0/27",
-            "metadata": {
-                "description": "CIDR address for the GatewaySubnet subnet must be a /27"
-            }
-        },
-        "BastionPIP1": {
-            "type": "string",
-            "defaultValue": "<Enter a unique name for your Bastion PIP>",
-            "metadata": {
-                "description": "Azure BastionHost Public IP"
-            }
-        },
-        "Bastionnstancename": {
-            "type": "string",
-            "defaultValue": "<Enter a unique name for your BastionHost>",
-            "metadata": {
-                "description": "BastionHost Instance Name"
-            }
-        },
-        "StorageAccountName": {
-            "type": "string",
-            "defaultValue": "<Enter your storage account name here>",
-            "metadata": {
-                "description": "Name of the migration storage account. Must not be more than 24 characters, no special characters, and lowercase"
-            }
-        },
-        "minimumTlsVersion": {
-            "type": "string",
-            "defaultValue": "TLS1_2",
-            "allowedValues": [
-                "TLS1_1",
-                "TLS1_2"
-            ],
-            "metadata": {
-                "description": "Minimum TLS Version. Recommended TLS 1.2"
-            }
-        },
-        "supportsHttpsTrafficOnly": {
-            "type": "bool",
-            "metadata": {
-                "description": "Allow only HTTPS traffic to the storage account"
-            }
-        },
-        "allowBlobPublicAccess": {
-            "type": "bool",
-            "metadata": {
-                "description": "Public access to the blob RECOMMENDATION IS NO"
-            }
-        },
-        "allowSharedKeyAccess": {
-            "type": "bool"
-        },
-        "allowCrossTenantReplication": {
-            "type": "bool",
-            "metadata": {
-                "description": "Set this to false unless you want to replicate outside your Azure tenant"
-            }
-        },
-        "defaultOAuth": {
-            "type": "bool",
-            "metadata": {
-                "description": "Set this to true to allow Azure Active Directory authentication"
-            }
-        },
-        
-        "largeFileSharesState": {
-            "type": "string",
-            "defaultValue": "enabled",
-            "metadata": {
-                "description": "Enable large share support, recommendation is set to enabled"
-            }
-        },
-
-        "isShareSoftDeleteEnabled": {
-            "type": "bool",
-            "metadata": {
-                "description": "Soft delete protection. Recommended"
-            }
-        },
-
-        "VMSize" : {
-           "type": "string",
-            "allowedValues" : [
-                "Standard_DS2_v2",
-                "Standard_DS3_v2",
-                "Standard_D4as_v4"
-            ],
-            "metadata": {
-                "description": "VM Size for the Migration  Server"
-            }
-        
-        },
-        "VMName": {
-            "type": "string",
-            "defaultValue": "M365-MIGVM",
-            "metadata": {
-                "description": "Basic name pattern of vm not more than 15 characters we are appending the numerical number at end of the vm"
-            }
-        },
-
-        "VMInstances": {
-            "type": "int",
-            "defaultValue": "2",
-            "metadata": {
-                "description": "Number of Migration Computers Needed"
-            }
-        },
-    
-            "Username": {
-                "type": "string",
-                "defaultValue": "xadmin",
-                "metadata": {
-                    "description": "Administrative Account"
-                }
-
-            },
-            "Password": {
-                "type": "securestring",
-                "metadata": {
-                    "description": "Administrative Password"
-                }
-            }
-        
-
-
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "metadata": {
+    "_generator": {
+      "name": "bicep",
+      "version": "0.6.18.56646",
+      "templateHash": "9255120046663163354"
+    }
+  },
+  "parameters": {
+    "BastionInstanceName": {
+      "type": "string",
+      "defaultValue": "<Enter a unique name for your BastionHost>",
+      "metadata": {
+        "description": "Name of the Bastion Host instance"
+      }
     },
-    "functions": [],
-    "variables": {},
-    "resources": [
-        {
-            "name": "NSG-01",
-            "type": "Microsoft.Network/networkSecurityGroups",
-            "apiVersion": "2018-08-01",
-            "location": "[resourceGroup().location]",
+    "BastionPublicIpAddressName": {
+      "type": "string",
+      "defaultValue": "<Enter a unique name for your Bastion PIP>",
+      "metadata": {
+        "description": "Name of the Public IP Address for the Azure Bastion Host"
+      }
+    },
+    "DnsServer": {
+      "type": "bool",
+      "defaultValue": true,
+      "metadata": {
+        "description": "Conditionally deploys a DNS Server with the appropriate conditional forwarder to support the Private Endpoint on the Storage Account"
+      }
+    },
+    "DnsServerForwarderIPAddress": {
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+        "description": "IP Address for the Forwarder on the DNS Server."
+      }
+    },
+    "DnsServerName": {
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+        "description": "Name of the Virtual Machine for the DNS Server."
+      }
+    },
+    "DnsServerSize": {
+      "type": "string",
+      "defaultValue": "Standard_D2s_v4",
+      "metadata": {
+        "description": "The size of the virtual machine."
+      }
+    },
+    "FileShareName": {
+      "type": "string",
+      "defaultValue": "migration-data",
+      "metadata": {
+        "description": "Name of the file share in Azure Files."
+      }
+    },
+    "FileShareSize": {
+      "type": "int",
+      "defaultValue": 100,
+      "metadata": {
+        "description": "Size of the file share in Azure Files"
+      },
+      "minValue": 100,
+      "maxValue": 1000
+    },
+    "HybridUseBenefit": {
+      "type": "string",
+      "defaultValue": "no",
+      "allowedValues": [
+        "yes",
+        "no"
+      ],
+      "metadata": {
+        "description": "Conditionally deploys the DNS Server with the Hybrid Use Benefit for Windows Server."
+      }
+    },
+    "JumpHostSubnetName": {
+      "type": "string",
+      "defaultValue": "JUMPHOST-SUBNET",
+      "metadata": {
+        "description": "Jump Host Subnet "
+      }
+    },
+    "PrivateEndpointSubnetName": {
+      "type": "string",
+      "defaultValue": "PRIVATE-ENDPOINT-SUBNET",
+      "metadata": {
+        "description": "Private Endpoint Subnet for Storage"
+      }
+    },
+    "JumpHostSubnetPrefix": {
+      "type": "string",
+      "defaultValue": "10.230.0.0/24",
+      "metadata": {
+        "description": "Enter the CIDR address for the JUMP Host Subnet"
+      }
+    },
+    "BastionSubnetPrefix": {
+      "type": "string",
+      "defaultValue": "10.230.1.0/27",
+      "metadata": {
+        "description": "CIDR address for the Azure Bastion subnet must be a /27"
+      }
+    },
+    "PrivateEndpointSubnetPrefix": {
+      "type": "string",
+      "defaultValue": "10.230.2.0/27",
+      "metadata": {
+        "description": "CIDR address for the Azure Bastion subnet must be a /27"
+      }
+    },
+    "GatewaySubnetPrefix": {
+      "type": "string",
+      "defaultValue": "10.230.3.0/27",
+      "metadata": {
+        "description": "CIDR address for the GatewaySubnet subnet must be a /27"
+      }
+    },
+    "RepositorySasToken": {
+      "type": "secureString",
+      "defaultValue": "",
+      "metadata": {
+        "description": "SAS Token for Azure Blob storage to host a private or custom version of this solution."
+      }
+    },
+    "RepositoryUri": {
+      "type": "string",
+      "defaultValue": "https://raw.githubusercontent.com/jamasten/Azure-Data-Box-and-M365-Migration-Accelerator/main/",
+      "metadata": {
+        "description": "URL to the repository for the code"
+      }
+    },
+    "StorageAccountName": {
+      "type": "string",
+      "defaultValue": "<Enter your storage account name here>",
+      "metadata": {
+        "description": "Name of the migration storage account. Must not be more than 24 characters, no special characters, and lowercase"
+      }
+    },
+    "Timestamp": {
+      "type": "string",
+      "defaultValue": "[utcNow()]",
+      "metadata": {
+        "description": "The timestamp is used to rerun VM extensions when the template needs to be redeployed due to an error or update."
+      }
+    },
+    "VirtualNetworkName": {
+      "type": "string",
+      "defaultValue": "<Enter the name-of-your-vnet>",
+      "metadata": {
+        "description": "The name of the Hub virtual network provisioned for the deployment"
+      }
+    },
+    "VirtualNetworkAddressPrefix": {
+      "type": "string",
+      "defaultValue": "10.230.0.0/21",
+      "metadata": {
+        "description": "Hub Virtual Network address CIDR."
+      }
+    },
+    "VMSize": {
+      "type": "string",
+      "defaultValue": "Standard_DS2_v2",
+      "allowedValues": [
+        "Standard_DS2_v2",
+        "Standard_DS3_v2",
+        "Standard_D4as_v4"
+      ],
+      "metadata": {
+        "description": "VM Size for the Migration  Server"
+      }
+    },
+    "VMName": {
+      "type": "string",
+      "defaultValue": "M365-MIGVM",
+      "metadata": {
+        "description": "Basic name pattern of vm not more than 15 characters we are appending the numerical number at end of the vm"
+      }
+    },
+    "VMInstances": {
+      "type": "int",
+      "defaultValue": 2,
+      "metadata": {
+        "description": "Number of Migration Computers Needed"
+      }
+    },
+    "VMUsername": {
+      "type": "string",
+      "defaultValue": "xadmin",
+      "metadata": {
+        "description": "Administrative Account"
+      }
+    },
+    "VMPassword": {
+      "type": "secureString",
+      "metadata": {
+        "description": "Administrative Password"
+      }
+    }
+  },
+  "variables": {
+    "DnsServerNetworkAddress": "[split(parameters('JumpHostSubnetPrefix'), '/')[0]]",
+    "DnsServerOctet0": "[split(variables('DnsServerNetworkAddress'), '.')[0]]",
+    "DnsServerOctet1": "[split(variables('DnsServerNetworkAddress'), '.')[1]]",
+    "DnsServerOctet2": "[split(variables('DnsServerNetworkAddress'), '.')[2]]",
+    "DnsServerOctet3": "[split(variables('DnsServerNetworkAddress'), '.')[3]]",
+    "DnsServerIpNumber": "[if(equals(variables('DnsServerOctet3'), '0'), 4, add(int(variables('DnsServerOctet3')), 4))]",
+    "DnsServerIpAddress": "[format('{0}.{1}.{2}.{3}', variables('DnsServerOctet0'), variables('DnsServerOctet1'), variables('DnsServerOctet2'), variables('DnsServerIpNumber'))]",
+    "Location": "[resourceGroup().location]",
+    "PrivateDnsZoneName": "[format('privatelink.file.{0}', variables('StorageSuffix'))]",
+    "PrivateEndpointName": "[format('{0}-PE', parameters('StorageAccountName'))]",
+    "StorageSuffix": "[environment().suffixes.storage]"
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Network/networkSecurityGroups",
+      "apiVersion": "2018-08-01",
+      "name": "NSG-01",
+      "location": "[variables('Location')]",
+      "properties": {
+        "securityRules": [
+          {
+            "name": "RDPnsgRule",
             "properties": {
-                "securityRules": [
-                    {
-                        "name": "RDPnsgRule",
-                        "properties": {
-                            "description": "description",
-                            "protocol": "Tcp",
-                            "sourcePortRange": "*",
-                            "destinationPortRange": "3389",
-                            "sourceAddressPrefix": "*",
-                            "destinationAddressPrefix": "*",
-                            "access": "Allow",
-                            "priority": 100,
-                            "direction": "Inbound"
-                        }
-                    }
-                ]
+              "description": "description",
+              "protocol": "Tcp",
+              "sourcePortRange": "*",
+              "destinationPortRange": "3389",
+              "sourceAddressPrefix": "*",
+              "destinationAddressPrefix": "*",
+              "access": "Allow",
+              "priority": 100,
+              "direction": "Inbound"
             }
+          }
+        ]
+      }
+    },
+    {
+      "type": "Microsoft.Network/virtualNetworks",
+      "apiVersion": "2019-11-01",
+      "name": "[parameters('VirtualNetworkName')]",
+      "location": "[variables('Location')]",
+      "tags": {
+        "displayName": "[parameters('VirtualNetworkName')]"
+      },
+      "properties": {
+        "addressSpace": {
+          "addressPrefixes": [
+            "[parameters('VirtualNetworkAddressPrefix')]"
+          ]
         },
-
-        {
-            "name": "[parameters('storageAccountName')]",
-            "type": "Microsoft.Storage/storageAccounts",
-            "apiVersion": "2021-06-01",
-            "location": "[resourceGroup().location]",
-            "kind": "FileStorage",
-            "sku": {
-                "name": "Premium_LRS",
-                "tier": "Premium"
-            },
-
-            "properties": {
-                "minimumTlsVersion": "[parameters('minimumTlsVersion')]",
-                "supportsHttpsTrafficOnly": "[parameters('supportsHttpsTrafficOnly')]",
-                "allowBlobPublicAccess": "[parameters('allowBlobPublicAccess')]",
-                "allowSharedKeyAccess": "[parameters('allowSharedKeyAccess')]",
-                "allowCrossTenantReplication": "[parameters('allowCrossTenantReplication')]",
-                "defaultToOAuthAuthentication": "[parameters('defaultOAuth')]",
-                "networkAcls": {
-                    "bypass": "AzureServices",
-                    "defaultAction": "Allow",
-                    "ipRules": []
-                },
-                "largeFileSharesState": "[parameters('largeFileSharesState')]"
-
-            }             
-           
+        "dhcpOptions": {
+          "dnsServers": [
+            "[if(parameters('DnsServer'), variables('DnsServerIpAddress'), '168.63.129.16')]"
+          ]
         },
-        {
-            "name": "[concat(parameters('storageAccountName'), '/default')]",
-            "type": "Microsoft.Storage/storageAccounts/fileservices",
-            "apiVersion": "2021-06-01",
+        "subnets": [
+          {
+            "name": "AzureBastionSubnet",
             "properties": {
-                "shareDeleteRetentionPolicy": {
-                    "enabled": "[parameters('isShareSoftDeleteEnabled')]"
-
-                }
-            },
-            "dependsOn": [
-                "[concat('Microsoft.Storage/storageAccounts/', parameters('storageAccountName'))]"
-            ]
-        },
-
-        {
-            "name": "[parameters('virtualNetworkName')]",
-            "type": "Microsoft.Network/virtualNetworks",
-            "apiVersion": "2019-11-01",
-            "location": "[resourceGroup().location]",
-             "dependsOn": [
-                "[resourceId('Microsoft.Network/networkSecurityGroups', 'NSG-01')]"
-            ],
-            "tags": {
-                "displayName": "[parameters('virtualNetworkName')]"
-            },
-            "properties": {
-                "addressSpace": {
-                    "addressPrefixes": [
-                        "[parameters('addressPrefix')]"
-                    ]
-                },
-                
-                "subnets": [
-                    {
-                        "name": "AzureBastionSubnet",
-                        "properties": {
-                            "addressPrefix": "[parameters('BastionSubnetPrefix')]"
-                        }
-                    },
-                    {
-                        "name": "[parameters('JumpHostSubnetName')]",
-                        "properties": {
-                            "addressPrefix": "[parameters('JumpHostSubnetPrefix')]",
-                            "networkSecurityGroup": {
-                                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', 'NSG-01')]"
-                                
-                            }
-                        }
-                    },
-                    {
-                        "name": "[parameters('PrivateEndpointSubnetName')]",
-                        "properties": {
-                            "addressPrefix": "[parameters('PrivateEndpointSubnetPrefix')]"
-                            
-                        }
-                    },
-                    {
-                        "name": "GatewaySubnet",
-                        "properties": {
-                            "addressPrefix": "[parameters('GatewaySubnetPrefix')]"
-                            
-                        }
-                    }
-                ]
-
-
-
-
+              "addressPrefix": "[parameters('BastionSubnetPrefix')]"
             }
-        },
-        {
-            "apiVersion": "2020-05-01",
-            "type": "Microsoft.Network/publicIpAddresses",
-            "name": "[parameters('BastionPIP1')]",
-            "location": "[resourceGroup().location]",
-            "sku": {
-                "name": "Standard"
-            },
+          },
+          {
+            "name": "[parameters('JumpHostSubnetName')]",
             "properties": {
-                "publicIPAllocationMethod": "Static"
+              "addressPrefix": "[parameters('JumpHostSubnetPrefix')]",
+              "networkSecurityGroup": {
+                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', 'NSG-01')]"
+              }
             }
-        },
-        {
-            "apiVersion": "2020-05-01",
-            "type": "Microsoft.Network/bastionHosts",
-            "name": "[parameters('Bastionnstancename')]",
-            "location": "[resourceGroup().location]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Network/publicIpAddresses', parameters('BastionPIP1'))]",
-                "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworkName'))]"
-
-            ],
+          },
+          {
+            "name": "[parameters('PrivateEndpointSubnetName')]",
             "properties": {
-                "ipConfigurations": [
-                    {
-                        "name": "IpConf",
-                        "properties": {
-                            "privateIPAllocationMethod": "Dynamic",
-                            "subnet": {
-                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworkName'), 'AzureBastionSubnet')]"
-                            },
-                            "publicIPAddress": {
-                                "id": "[resourceId('Microsoft.Network/publicIpAddresses', parameters('BastionPIP1'))]"
-                            }
-                        }
-                    }
-                ]
+              "addressPrefix": "[parameters('PrivateEndpointSubnetPrefix')]",
+              "privateEndpointNetworkPolicies": "Enabled",
+              "privateLinkServiceNetworkPolicies": "Enabled"
             }
-        },
-        
-
-        {
-            "name": "[concat(parameters('VMName'),'-NIC-',copyIndex(1))]",
-            "type": "Microsoft.Network/networkInterfaces",
-            "apiVersion": "2019-11-01",
-            "location": "[resourceGroup().location]",
-            "copy": {
-                "name": "nicLoop",
-                "count": "[parameters('VMInstances')]"
-            },
-             "dependsOn": [
-
-                "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworkName'))]"
-            ],
-            "tags": {
-                "displayName": "[concat(parameters('VMName'),'-NIC-',copyIndex(1))]"
-            },
+          },
+          {
+            "name": "GatewaySubnet",
             "properties": {
-                "ipConfigurations": [
-                    {
-                        "name": "ipConfig1",
-                        "properties": {
-                            "privateIPAllocationMethod": "Dynamic",
-                            "subnet": {
-                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworkName'), parameters('JumpHostSubnetName'))]"
-                            }
-                        }
-                    }
-                ]
+              "addressPrefix": "[parameters('GatewaySubnetPrefix')]"
             }
-        },
-        {
-            "name": "[concat(parameters('VMName'),'-',copyIndex(1))]",
-            "type": "Microsoft.Compute/virtualMachines",
-            "apiVersion": "2019-07-01",
-            "location": "[resourceGroup().location]",
-            "copy": {
-                "name": "vmLoop",
-                "count": "[parameters('VMInstances')]"
-            },
-            "dependsOn": [
-
-                "[resourceId('Microsoft.Network/networkInterfaces', concat(parameters('VMName'),'-NIC-',copyIndex(1)))]"
-            ],
-            "tags": {
-                "displayName": "[concat(parameters('VMName'),copyIndex(1))]"
-            },
+          }
+        ]
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Network/networkSecurityGroups', 'NSG-01')]"
+      ]
+    },
+    {
+      "type": "Microsoft.Network/publicIPAddresses",
+      "apiVersion": "2020-05-01",
+      "name": "[parameters('BastionPublicIpAddressName')]",
+      "location": "[variables('Location')]",
+      "sku": {
+        "name": "Standard"
+      },
+      "properties": {
+        "publicIPAllocationMethod": "Static"
+      }
+    },
+    {
+      "type": "Microsoft.Network/bastionHosts",
+      "apiVersion": "2020-05-01",
+      "name": "[parameters('BastionInstanceName')]",
+      "location": "[variables('Location')]",
+      "properties": {
+        "ipConfigurations": [
+          {
+            "name": "ipconfig1",
             "properties": {
-                "hardwareProfile": {
-                    "vmSize": "[parameters('VMSize')]"
-                },
-                "osProfile": {
-                    "computerName": "[concat(parameters('VMName'),'-',copyIndex(1))]",
-                    "adminUsername": "[parameters('Username')]",
-                    "adminPassword": "[parameters('Password')]"
-
-                },
-                "storageProfile": {
-                    "imageReference": {
-                        "publisher": "MicrosoftWindowsServer",
-                        "offer": "WindowsServer",
-                        "sku": "2019-Datacenter",
-                        "version": "latest"
-                    },
-                    "osDisk": {
-                        "osType": "Windows",
-                        "name": "[concat(parameters('VMName'),copyIndex(1),'-OSDISK')]",
-                        "caching": "ReadWrite",
-                        "createOption": "FromImage",
-                        "managedDisk": {
-                            "storageAccountType": "Standard_LRS"
-
-                        },
-                        "diskSizeGB": 127
-
-                    },
-                    "dataDisks": []
-                },
-                "networkProfile": {
-                    "networkInterfaces": [
-                        {
-                            "id": "[resourceId('Microsoft.Network/networkInterfaces', concat(parameters('VMName'),'-NIC-',copyIndex(1)))]"
-                        }
-                    ]
-                }
-
+              "privateIPAllocationMethod": "Dynamic",
+              "subnet": {
+                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('VirtualNetworkName'), 'AzureBastionSubnet')]"
+              },
+              "publicIPAddress": {
+                "id": "[resourceId('Microsoft.Network/publicIPAddresses', parameters('BastionPublicIpAddressName'))]"
+              }
             }
+          }
+        ]
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Network/publicIPAddresses', parameters('BastionPublicIpAddressName'))]",
+        "[resourceId('Microsoft.Network/virtualNetworks', parameters('VirtualNetworkName'))]"
+      ]
+    },
+    {
+      "type": "Microsoft.Storage/storageAccounts",
+      "apiVersion": "2021-06-01",
+      "name": "[parameters('StorageAccountName')]",
+      "location": "[variables('Location')]",
+      "kind": "FileStorage",
+      "sku": {
+        "name": "Premium_LRS"
+      },
+      "properties": {
+        "minimumTlsVersion": "TLS1_2",
+        "supportsHttpsTrafficOnly": true,
+        "allowSharedKeyAccess": true,
+        "networkAcls": {
+          "bypass": "AzureServices",
+          "virtualNetworkRules": [],
+          "ipRules": [],
+          "defaultAction": "Deny"
         }
-
-
-
-
-    ],
-    "outputs": {}
+      }
+    },
+    {
+      "type": "Microsoft.Storage/storageAccounts/fileServices",
+      "apiVersion": "2021-06-01",
+      "name": "[format('{0}/{1}', parameters('StorageAccountName'), 'default')]",
+      "properties": {
+        "shareDeleteRetentionPolicy": {
+          "enabled": false
+        }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Storage/storageAccounts', parameters('StorageAccountName'))]"
+      ]
+    },
+    {
+      "type": "Microsoft.Storage/storageAccounts/fileServices/shares",
+      "apiVersion": "2021-02-01",
+      "name": "[format('{0}/{1}/{2}', parameters('StorageAccountName'), 'default', parameters('FileShareName'))]",
+      "properties": {
+        "accessTier": "Premium",
+        "shareQuota": "[parameters('FileShareSize')]",
+        "enabledProtocols": "SMB"
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Storage/storageAccounts/fileServices', parameters('StorageAccountName'), 'default')]"
+      ]
+    },
+    {
+      "type": "Microsoft.Network/privateEndpoints",
+      "apiVersion": "2021-08-01",
+      "name": "[variables('PrivateEndpointName')]",
+      "location": "[variables('Location')]",
+      "properties": {
+        "subnet": {
+          "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('VirtualNetworkName'), parameters('PrivateEndpointSubnetName'))]"
+        },
+        "privateLinkServiceConnections": [
+          {
+            "name": "[variables('PrivateEndpointName')]",
+            "properties": {
+              "privateLinkServiceId": "[resourceId('Microsoft.Storage/storageAccounts', parameters('StorageAccountName'))]",
+              "groupIds": [
+                "file"
+              ]
+            }
+          }
+        ]
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Storage/storageAccounts', parameters('StorageAccountName'))]",
+        "[resourceId('Microsoft.Network/virtualNetworks', parameters('VirtualNetworkName'))]"
+      ]
+    },
+    {
+      "type": "Microsoft.Network/privateDnsZones",
+      "apiVersion": "2020-06-01",
+      "name": "[variables('PrivateDnsZoneName')]",
+      "location": "global",
+      "tags": {},
+      "properties": {}
+    },
+    {
+      "type": "Microsoft.Network/privateEndpoints/privateDnsZoneGroups",
+      "apiVersion": "2021-08-01",
+      "name": "[format('{0}/{1}', variables('PrivateEndpointName'), parameters('StorageAccountName'))]",
+      "properties": {
+        "privateDnsZoneConfigs": [
+          {
+            "name": "ipconfig1",
+            "properties": {
+              "privateDnsZoneId": "[resourceId('Microsoft.Network/privateDnsZones', variables('PrivateDnsZoneName'))]"
+            }
+          }
+        ]
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Network/privateDnsZones', variables('PrivateDnsZoneName'))]",
+        "[resourceId('Microsoft.Network/privateEndpoints', variables('PrivateEndpointName'))]",
+        "[resourceId('Microsoft.Storage/storageAccounts', parameters('StorageAccountName'))]"
+      ]
+    },
+    {
+      "type": "Microsoft.Network/privateDnsZones/virtualNetworkLinks",
+      "apiVersion": "2020-06-01",
+      "name": "[format('{0}/{1}', variables('PrivateDnsZoneName'), format('{0}-link', parameters('VirtualNetworkName')))]",
+      "location": "global",
+      "properties": {
+        "registrationEnabled": false,
+        "virtualNetwork": {
+          "id": "[resourceId('Microsoft.Network/virtualNetworks', parameters('VirtualNetworkName'))]"
+        }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Network/privateDnsZones', variables('PrivateDnsZoneName'))]",
+        "[resourceId('Microsoft.Network/virtualNetworks', parameters('VirtualNetworkName'))]"
+      ]
+    },
+    {
+      "condition": "[parameters('DnsServer')]",
+      "type": "Microsoft.Network/networkInterfaces",
+      "apiVersion": "2020-05-01",
+      "name": "[format('{0}-NIC', parameters('DnsServerName'))]",
+      "location": "[variables('Location')]",
+      "properties": {
+        "ipConfigurations": [
+          {
+            "name": "ipconfig1",
+            "properties": {
+              "privateIPAddress": "[variables('DnsServerIpAddress')]",
+              "privateIPAllocationMethod": "Static",
+              "subnet": {
+                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('VirtualNetworkName'), parameters('JumpHostSubnetName'))]"
+              },
+              "primary": true,
+              "privateIPAddressVersion": "IPv4"
+            }
+          }
+        ],
+        "dnsSettings": {
+          "dnsServers": []
+        },
+        "enableAcceleratedNetworking": false,
+        "enableIPForwarding": false
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Network/virtualNetworks', parameters('VirtualNetworkName'))]"
+      ]
+    },
+    {
+      "condition": "[parameters('DnsServer')]",
+      "type": "Microsoft.Compute/virtualMachines",
+      "apiVersion": "2019-07-01",
+      "name": "[parameters('DnsServerName')]",
+      "location": "[variables('Location')]",
+      "properties": {
+        "hardwareProfile": {
+          "vmSize": "[parameters('DnsServerSize')]"
+        },
+        "storageProfile": {
+          "imageReference": {
+            "publisher": "MicrosoftWindowsServer",
+            "offer": "WindowsServer",
+            "sku": "2019-Datacenter",
+            "version": "latest"
+          },
+          "osDisk": {
+            "osType": "Windows",
+            "name": "[format('{0}-OSDISK', parameters('DnsServerName'))]",
+            "createOption": "FromImage",
+            "caching": "ReadWrite",
+            "managedDisk": {
+              "storageAccountType": "Premium_LRS"
+            },
+            "diskSizeGB": 127
+          },
+          "dataDisks": []
+        },
+        "osProfile": {
+          "computerName": "[parameters('DnsServerName')]",
+          "adminUsername": "[parameters('VMUsername')]",
+          "adminPassword": "[parameters('VMPassword')]",
+          "windowsConfiguration": {
+            "provisionVMAgent": true,
+            "enableAutomaticUpdates": true
+          },
+          "secrets": [],
+          "allowExtensionOperations": true
+        },
+        "networkProfile": {
+          "networkInterfaces": [
+            {
+              "id": "[resourceId('Microsoft.Network/networkInterfaces', format('{0}-NIC', parameters('DnsServerName')))]"
+            }
+          ]
+        },
+        "licenseType": "[if(equals(parameters('HybridUseBenefit'), 'yes'), 'Windows_Server', json('null'))]"
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Network/networkInterfaces', format('{0}-NIC', parameters('DnsServerName')))]"
+      ]
+    },
+    {
+      "condition": "[parameters('DnsServer')]",
+      "type": "Microsoft.Compute/virtualMachines/extensions",
+      "apiVersion": "2019-07-01",
+      "name": "[format('{0}/{1}', parameters('DnsServerName'), 'DSC')]",
+      "location": "[variables('Location')]",
+      "properties": {
+        "forceUpdateTag": "[parameters('Timestamp')]",
+        "autoUpgradeMinorVersion": true,
+        "publisher": "Microsoft.Powershell",
+        "type": "DSC",
+        "typeHandlerVersion": "2.77",
+        "settings": {
+          "modulesUrl": "configurations/dnsForwarders.zip",
+          "configurationFunction": "dnsForwarders.ps1\\dnsForwarders",
+          "configurationArguments": {
+            "ActionAfterReboot": "ContinueConfiguration",
+            "ConfigurationMode": "ApplyandAutoCorrect",
+            "RebootNodeIfNeeded": true
+          },
+          "properties": [
+            {
+              "Name": "ForwarderIPAddresses",
+              "Value": "[parameters('DnsServerForwarderIPAddress')]",
+              "TypeName": "System.Array"
+            },
+            {
+              "Name": "StorageSuffix",
+              "Value": "[variables('StorageSuffix')]",
+              "TypeName": "System.String"
+            }
+          ]
+        },
+        "protectedSettings": {}
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Compute/virtualMachines', parameters('DnsServerName'))]"
+      ]
+    },
+    {
+      "copy": {
+        "name": "networkInterfaces_MigrationServers",
+        "count": "[length(range(0, parameters('VMInstances')))]"
+      },
+      "type": "Microsoft.Network/networkInterfaces",
+      "apiVersion": "2019-11-01",
+      "name": "[format('{0}-NIC-{1}', parameters('VMName'), add(range(0, parameters('VMInstances'))[copyIndex()], 1))]",
+      "location": "[variables('Location')]",
+      "tags": {
+        "displayName": "[format('{0}-NIC-{1}', parameters('VMName'), add(range(0, parameters('VMInstances'))[copyIndex()], 1))]"
+      },
+      "properties": {
+        "ipConfigurations": [
+          {
+            "name": "ipConfig1",
+            "properties": {
+              "privateIPAllocationMethod": "Dynamic",
+              "subnet": {
+                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('VirtualNetworkName'), parameters('JumpHostSubnetName'))]"
+              }
+            }
+          }
+        ]
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Network/virtualNetworks', parameters('VirtualNetworkName'))]"
+      ]
+    },
+    {
+      "copy": {
+        "name": "virtualMachines_MigrationServers",
+        "count": "[length(range(0, parameters('VMInstances')))]"
+      },
+      "type": "Microsoft.Compute/virtualMachines",
+      "apiVersion": "2019-07-01",
+      "name": "[format('{0}-{1}', parameters('VMName'), add(range(0, parameters('VMInstances'))[copyIndex()], 1))]",
+      "location": "[variables('Location')]",
+      "tags": {
+        "displayName": "[format('{0}{1}', parameters('VMName'), add(range(0, parameters('VMInstances'))[copyIndex()], 1))]"
+      },
+      "properties": {
+        "hardwareProfile": {
+          "vmSize": "[parameters('VMSize')]"
+        },
+        "osProfile": {
+          "computerName": "[format('{0}-{1}', parameters('VMName'), add(range(0, parameters('VMInstances'))[copyIndex()], 1))]",
+          "adminUsername": "[parameters('VMUsername')]",
+          "adminPassword": "[parameters('VMPassword')]"
+        },
+        "storageProfile": {
+          "imageReference": {
+            "publisher": "MicrosoftWindowsServer",
+            "offer": "WindowsServer",
+            "sku": "2019-Datacenter",
+            "version": "latest"
+          },
+          "osDisk": {
+            "osType": "Windows",
+            "name": "[format('{0}-{1}-OSDISK', parameters('VMName'), add(range(0, parameters('VMInstances'))[copyIndex()], 1))]",
+            "caching": "ReadWrite",
+            "createOption": "FromImage",
+            "managedDisk": {
+              "storageAccountType": "Standard_LRS"
+            },
+            "diskSizeGB": 127
+          },
+          "dataDisks": []
+        },
+        "networkProfile": {
+          "networkInterfaces": [
+            {
+              "id": "[resourceId('Microsoft.Network/networkInterfaces', format('{0}-NIC-{1}', parameters('VMName'), add(range(0, parameters('VMInstances'))[range(0, parameters('VMInstances'))[copyIndex()]], 1)))]"
+            }
+          ]
+        },
+        "licenseType": "[if(equals(parameters('HybridUseBenefit'), 'yes'), 'Windows_Server', json('null'))]"
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Network/networkInterfaces', format('{0}-NIC-{1}', parameters('VMName'), add(range(0, parameters('VMInstances'))[range(0, parameters('VMInstances'))[copyIndex()]], 1)))]"
+      ]
+    },
+    {
+      "copy": {
+        "name": "customScriptExtension_MigrationServers",
+        "count": "[length(range(0, parameters('VMInstances')))]"
+      },
+      "type": "Microsoft.Compute/virtualMachines/extensions",
+      "apiVersion": "2021-03-01",
+      "name": "[format('{0}/{1}', format('{0}-{1}', parameters('VMName'), add(range(0, parameters('VMInstances'))[range(0, parameters('VMInstances'))[copyIndex()]], 1)), 'CustomScriptExtension')]",
+      "location": "[variables('Location')]",
+      "tags": {},
+      "properties": {
+        "publisher": "Microsoft.Compute",
+        "type": "CustomScriptExtension",
+        "typeHandlerVersion": "1.10",
+        "autoUpgradeMinorVersion": true,
+        "settings": {
+          "fileUris": [
+            "[format('{0}scripts/Add-AzureFileShare.ps1{1}', parameters('RepositoryUri'), parameters('RepositorySasToken'))]"
+          ],
+          "timestamp": "[parameters('Timestamp')]"
+        },
+        "protectedSettings": {
+          "commandToExecute": "[format('powershell -ExecutionPolicy Unrestricted -File Add-AzureFileShare.ps1 -ShareName {0} -StorageAccountName {1} -StorageKey {2} -StorageSuffix {3} -VMUsername {4} -VMPassword {5}', parameters('FileShareName'), parameters('StorageAccountName'), listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('StorageAccountName')), '2021-06-01').keys[0].value, variables('StorageSuffix'), parameters('VMUsername'), parameters('VMPassword'))]"
+        }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Storage/storageAccounts', parameters('StorageAccountName'))]",
+        "[resourceId('Microsoft.Compute/virtualMachines', format('{0}-{1}', parameters('VMName'), add(range(0, parameters('VMInstances'))[range(0, parameters('VMInstances'))[copyIndex()]], 1)))]"
+      ]
+    }
+  ]
 }
