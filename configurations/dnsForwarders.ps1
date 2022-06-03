@@ -3,10 +3,10 @@
    param
    ( 
         [Parameter(Mandatory)]
-        [Array]$ForwarderIPAddresses,
+        [array]$ForwarderIPAddresses,
 
         [Parameter(Mandatory)]
-        [Array]$StorageSuffix
+        [string]$StorageSuffix
     ) 
     
     Import-DscResource -ModuleName PSDscResources -ModuleVersion '2.12.0.0'
