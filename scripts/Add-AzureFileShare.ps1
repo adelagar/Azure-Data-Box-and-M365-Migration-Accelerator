@@ -14,10 +14,10 @@ param(
     
 )
 
-$Share = "\\$StorageAccountName.file.$StorageSuffix\$ShareName"
-$DeleteShare = 'net use z: /delete'
-$AddShare = "net use z: $Share $StorageKey /user:Azure\$StorageAccountName"
-$Path = 'C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Startup'
-$File = New-Item -Path $Path -Name 'Share.bat' -ItemType 'File' -Force
-$DeleteShare | Out-File -FilePath $File.FullName -Append -Force
-$AddShare | Out-File -FilePath $File.FullName -Append -Force
+$ErrorActionPreference = 'Stop'
+
+$FileShare = '\\' + $StorageAccountName + '.file.' + $StorageSuffix + '\' + $ShareName
+$Username = 'Azure\' + $StorageAccountName
+$Password = ConvertTo-SecureString -String "$($StorageKey)" -AsPlainText -Force
+[pscredential]$Credential = New-Object System.Management.Automation.PSCredential ($Username, $Password)
+New-SmbGlobalMapping -RemotePath $FileShare -Credential $Credential -LocalPath 'Z:'
