@@ -406,7 +406,7 @@
                                     "options": {
                                         "text": "The file share deployed in this solution is configured with a private endpoint.  The DNS server option below is required if you plan to integrate this solution with your organization's networks and DNS.  A DNS server will be deployed with a conditional forwarder to Azure's file services.  If you do not deploy a DNS server, the default Azure VIP will be configured on the virtual network as the DNS server and must be maintained for the solution to work.",
                                         "link": {
-                                            "label": "Learn More",
+                                            "label": "Learn more about Private Endpoints with Azure Files",
                                             "uri": "https://docs.microsoft.com/en-us/azure/storage/common/storage-private-endpoints"
                                         }
                                     }
