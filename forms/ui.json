@@ -292,22 +292,25 @@
                                 },
                                 {
                                     "name": "virtualMachinePassword",
-                                    "type": "Microsoft.Common.PasswordBox",
+                                    "type": "Microsoft.Compute.CredentialsCombo",
                                     "label": {
-                                        "password": "Password",
-                                        "confirmPassword": "Confirm Password"
+                                      "password": "Password",
+                                      "confirmPassword": "Confirm Password"
                                     },
-                                    "toolTip": "The password must be alphanumeric, contain at least 12 characters, have at least 1 letter,1 number and 1 special character.",
+                                    "toolTip": {
+                                      "password": "Enter the password for the local administrator account."
+                                    },
                                     "constraints": {
-                                        "required": true,
-                                        "regex": "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=_!*<>()])(?=\\S+$).{12,123}$",
-                                        "validationMessage": "Password must include 1 special character."
+                                      "required": true,
+                                      "customPasswordRegex": "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{12,}$",
+                                      "customValidationMessage": "The password must be alphanumeric, contain at least 12 characters, and have at least 1 letter and 1 number."
                                     },
                                     "options": {
-                                        "hideConfirmation": false
+                                      "hideConfirmation": false
                                     },
+                                    "osPlatform": "Windows",
                                     "visible": true
-                                }
+                                  }
                             ]
                         }
                     ]
