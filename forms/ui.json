@@ -32,7 +32,7 @@
                         {
                             "name": "virtualNetwork",
                             "type": "Microsoft.Common.Section",
-                            "visible": "true",
+                            "visible": true,
                             "label": "Virtual Network",
                             "elements": [
                                 {
@@ -66,7 +66,7 @@
                         {
                             "name": "subnets",
                             "type": "Microsoft.Common.Section",
-                            "visible": "true",
+                            "visible": true,
                             "label": "Subnets",
                             "elements": [
                                 {
@@ -145,7 +145,7 @@
                         {
                             "name": "bastion",
                             "type": "Microsoft.Common.Section",
-                            "visible": "true",
+                            "visible": true,
                             "label": "Azure Bastion Settings",
                             "elements": [
                                 {
@@ -185,7 +185,7 @@
                         {                            
                             "name": "generalSettings",
                             "type": "Microsoft.Common.Section",
-                            "visible": "true",
+                            "visible": true,
                             "label": "General Settings",
                             "elements": [
                                 {
@@ -268,7 +268,7 @@
                         {                            
                             "name": "localAdminCredential",
                             "type": "Microsoft.Common.Section",
-                            "visible": "true",
+                            "visible": true,
                             "label": "Local Administrator Credential",
                             "elements": [
                                 {
@@ -314,7 +314,7 @@
                         {                            
                             "name": "azureFiles",
                             "type": "Microsoft.Common.Section",
-                            "visible": "true",
+                            "visible": true,
                             "label": "Azure Files",
                             "elements": [
                                 {
@@ -391,7 +391,7 @@
                         {                            
                             "name": "privateEndpointOptions",
                             "type": "Microsoft.Common.Section",
-                            "visible": "true",
+                            "visible": true,
                             "label": "Conditional Forwarder for Private Endpoint",
                             "elements": [
                                 {
