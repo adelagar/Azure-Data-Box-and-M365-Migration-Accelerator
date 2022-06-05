@@ -414,8 +414,8 @@
                                 {
                                     "name": "dnsServer",
                                     "type": "Microsoft.Common.OptionsGroup",
-                                    "label": "DNS Server",
-                                    "defaultValue": "Yes",
+                                    "label": "Enable",
+                                    "defaultValue": "No",
                                     "toolTip": "This value determines whether a DNS Server is deployed. The server will be configured with the appropriate conditional forwarder to support the Private Endpoint on Azure Files.  This is only needed if you will integrate your organizations's DNS with the solution.",
                                     "constraints": {
                                         "required": true,
@@ -435,7 +435,7 @@
                                 {
                                     "name": "dnsServerName",
                                     "type": "Microsoft.Common.TextBox",
-                                    "label": "DNS Server Name",
+                                    "label": "VM Name",
                                     "defaultValue": "",
                                     "toolTip": "Enter the name of the virtual machine for the DNS server.",
                                     "constraints": {
@@ -448,7 +448,7 @@
                                 {
                                     "name": "dnsServerSize",
                                     "type": "Microsoft.Compute.SizeSelector",
-                                    "label": "DNS Server Size",
+                                    "label": "VM Size",
                                     "toolTip": "Enter the size of the virtual machine for the DNS server.",
                                     "recommendedSizes": [
                                         "Standard_D2s_v4"
@@ -471,7 +471,7 @@
                                 {
                                     "name": "dnsServerForwarderIPAddresses1",
                                     "type": "Microsoft.Common.TextBox",
-                                    "label": "Dns Server Forwarder IP Address 01",
+                                    "label": "Forwarder IP Address 01",
                                     "defaultValue": "",
                                     "toolTip": "Enter the IP address for the first Forwarder on the DNS Server.",
                                     "constraints": {
@@ -484,7 +484,7 @@
                                 {
                                     "name": "dnsServerForwarderIPAddresses2",
                                     "type": "Microsoft.Common.TextBox",
-                                    "label": "Dns Server Forwarder IP Address 02",
+                                    "label": "Forwarder IP Address 02",
                                     "defaultValue": "",
                                     "toolTip": "Enter the IP address for the second Forwarder on the DNS Server.",
                                     "constraints": {
