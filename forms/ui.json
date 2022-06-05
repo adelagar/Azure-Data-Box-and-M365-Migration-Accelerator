@@ -11,7 +11,12 @@
                     "elements": [
                         {
                             "name": "resourceScope",
-                            "type": "Microsoft.Common.ResourceScope"
+                            "type": "Microsoft.Common.ResourceScope",
+                            "location": {
+                                "resourceTypes": [
+                                    "Microsoft.Resources/resourceGroups"
+                                ]
+                            }
                         },
                         {
                             "name": "requiredPermissions",
@@ -244,9 +249,9 @@
                                 },
                                 {
                                     "name": "hybridUseBenefit",
-                                    "type": "Microsoft.Common.DropDown",
+                                    "type": "Microsoft.Common.OptionsGroup",
                                     "label": "Hybrid Use Benefit",
-                                    "defaultValue": "no",
+                                    "defaultValue": "No",
                                     "toolTip": "This value determines whether the virtual machines in this solution should use the Hybrid Use Benefit for Windows Server. https://docs.microsoft.com/en-us/windows-server/get-started/azure-hybrid-benefit",
                                     "constraints": {
                                         "required": true,
