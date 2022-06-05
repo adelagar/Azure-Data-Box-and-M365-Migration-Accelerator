@@ -1,0 +1,516 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2021-09-09/uiFormDefinition.schema.json",
+    "view": {
+        "kind": "Form",
+        "properties": {
+            "title": "Azure Data Box and M365 Migration Accelerator",
+            "steps": [
+                {
+                    "name": "basics",
+                    "label": "Basics",
+                    "elements": [
+                        {
+                            "name": "resourceScope",
+                            "type": "Microsoft.Common.ResourceScope",
+                            "location": {
+                                "resourceTypes": [
+                                    "Microsoft.Resources/resourceGroups"
+                                ]
+                            }
+                        },
+                        {
+                            "name": "requiredPermissions",
+                            "type": "Microsoft.Common.InfoBox",
+                            "visible": true,
+                            "options": {
+                                "text": "This solution requires Contributor access at the Resource Group scope. Please ensure you have the appropriate permissions to avoid a deployment failure.",
+                                "uri": "https://docs.microsoft.com/en-us/azure/role-based-access-control/built-in-roles#contributor",
+                                "style": "Warning"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "networking",
+                    "label": "Networking",
+                    "elements": [
+                        {
+                            "name": "virtualNetwork",
+                            "type": "Microsoft.Common.Section",
+                            "visible": "true",
+                            "label": "Virtual Network",
+                            "elements": [
+                                {
+                                    "name": "virtualNetworkName",
+                                    "type": "Microsoft.Common.TextBox",
+                                    "label": "Name",
+                                    "defaultValue": "",
+                                    "toolTip": "Enter the name of the virtual network that will be deployed to your resource group.",
+                                    "constraints": {
+                                        "required": true,
+                                        "regex": "^(?:[a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9_\\.-]{0,78}[a-zA-Z0-9_])$",
+                                        "validationMessage": "The value must be within 2 to 64 characters and contain only alphanumerics, underscores, periods, and hyphens.  It must start with an alphanumeric and end with an alphanumeric or underscore."
+                                    },
+                                    "visible": true
+                                },
+                                {
+                                    "name": "virtualNetworkAddressPrefix",
+                                    "type": "Microsoft.Common.TextBox",
+                                    "label": "Address Prefix",
+                                    "defaultValue": "10.230.0.0/21",
+                                    "toolTip": "Enter the address prefix for the virtual network.",
+                                    "constraints": {
+                                        "required": true,
+                                        "regex": "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/(3[0-2]|[1-2][0-9]|[0-9]))$",
+                                        "validationMessage": "This value must be in CIDR notation (e.g. 10.0.0.0/21)."
+                                    },
+                                    "visible": true
+                                }
+                            ]
+                        },
+                        {
+                            "name": "subnets",
+                            "type": "Microsoft.Common.Section",
+                            "visible": "true",
+                            "label": "Subnets",
+                            "elements": [
+                                {
+                                    "name": "jumpHostSubnetName",
+                                    "type": "Microsoft.Common.TextBox",
+                                    "label": "Jump Host Name",
+                                    "defaultValue": "JumpHosts",
+                                    "toolTip": "Enter the name of the subnet for the jump host virtual machines.",
+                                    "constraints": {
+                                        "required": true,
+                                        "regex": "^(?:[a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9_\\.-]{0,78}[a-zA-Z0-9_])$",
+                                        "validationMessage": "The value must be within 1 to 80 characters and contain only alphanumerics, underscores, periods, and hyphens.  It must start with an alphanumeric and end with an alphanumeric or underscore."
+                                    },
+                                    "visible": true
+                                },
+                                {
+                                    "name": "jumpHostSubnetPrefix",
+                                    "type": "Microsoft.Common.TextBox",
+                                    "label": "Jump Host Address Prefix",
+                                    "defaultValue": "10.230.0.0/24",
+                                    "toolTip": "Enter the address prefix for the jump host subnet.",
+                                    "constraints": {
+                                        "required": true,
+                                        "regex": "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/(3[0-2]|[1-2][0-9]|[0-9]))$",
+                                        "validationMessage": "This value must be in CIDR notation (e.g. 10.0.0.0/24)."
+                                    },
+                                    "visible": true
+                                },
+                                {
+                                    "name": "privateEndpointSubnetName",
+                                    "type": "Microsoft.Common.TextBox",
+                                    "label": "Private Endpoint Name",
+                                    "defaultValue": "PrivateEndpoint",
+                                    "toolTip": "Enter the name of the subnet for the private endpoint on Azure Files.",
+                                    "constraints": {
+                                        "required": true,
+                                        "regex": "^(?:[a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9_\\.-]{0,78}[a-zA-Z0-9_])$",
+                                        "validationMessage": "The value must be within 1 to 80 characters and contain only alphanumerics, underscores, periods, and hyphens.  It must start with an alphanumeric and end with an alphanumeric or underscore."
+                                    },
+                                    "visible": true
+                                },
+                                {
+                                    "name": "privateEndpointSubnetPrefix",
+                                    "type": "Microsoft.Common.TextBox",
+                                    "label": "Private Endpoint Address Prefix",
+                                    "defaultValue": "10.230.2.0/27",
+                                    "toolTip": "Enter the address prefix for the Private Endpoint subnet.",
+                                    "constraints": {
+                                        "required": true,
+                                        "regex": "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/(3[0-2]|[1-2][0-9]|[0-9]))$",
+                                        "validationMessage": "This value must be in CIDR notation (e.g. 10.0.0.0/27) and the network prefix must be /27."
+                                    },
+                                    "visible": true
+                                },
+                                {
+                                    "name": "gatewaySubnetPrefix",
+                                    "type": "Microsoft.Common.TextBox",
+                                    "label": "Gateway Address Prefix",
+                                    "defaultValue": "10.230.3.0/27",
+                                    "toolTip": "Enter the address prefix for the GatewaySubnet subnet.",
+                                    "constraints": {
+                                        "required": true,
+                                        "regex": "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/27)$",
+                                        "validationMessage": "This value must be in CIDR notation (e.g. 10.0.0.0/27) and the network prefix must be /27."
+                                    },
+                                    "visible": true
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "name": "remoteAccess",
+                    "label": "Remote Access",
+                    "elements": [
+                        {
+                            "name": "bastion",
+                            "type": "Microsoft.Common.Section",
+                            "visible": "true",
+                            "label": "Azure Bastion Settings",
+                            "elements": [
+                                {
+                                    "name": "bastionName",
+                                    "type": "Microsoft.Common.TextBox",
+                                    "label": "Name",
+                                    "defaultValue": "",
+                                    "toolTip": "Enter the name of the Azure Bastion Host.",
+                                    "constraints": {
+                                        "required": true,
+                                        "regex": "^(?:[a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9_\\.-]{0,78}[a-zA-Z0-9_])$",
+                                        "validationMessage": "The value must be within 1 to 80 characters and contain only alphanumerics, underscores, periods, and hyphens.  It must start with an alphanumeric and end with an alphanumeric or underscore."
+                                    },
+                                    "visible": true
+                                },
+                                {
+                                    "name": "bastionSubnetPrefix",
+                                    "type": "Microsoft.Common.TextBox",
+                                    "label": "Address Prefix",
+                                    "defaultValue": "10.230.1.0/27",
+                                    "toolTip": "Enter the address prefix for the Azure Bastion subnet.",
+                                    "constraints": {
+                                        "required": true,
+                                        "regex": "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/27)$",
+                                        "validationMessage": "This value must be in CIDR notation (e.g. 10.0.0.0/27) and the network prefix must be /27."
+                                    },
+                                    "visible": true
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "name": "virtualMachines",
+                    "label": "Virtual Machines",
+                    "elements": [
+                        {                            
+                            "name": "generalSettings",
+                            "type": "Microsoft.Common.Section",
+                            "visible": "true",
+                            "label": "General Settings",
+                            "elements": [
+                                {
+                                    "name": "virtualMachineName",
+                                    "type": "Microsoft.Common.TextBox",
+                                    "label": "VM Name Prefix",
+                                    "defaultValue": "M365-MIGVM",
+                                    "toolTip": "Enter the name prefix for the virtual machines migrating your data. One character is reserved for a number that will be appended to the end of the name.",
+                                    "constraints": {
+                                        "required": true,
+                                        "regex": "^(?!.*[.]$)(?!.*-$)[^\\/\\[\\]:|\u003C\u003E\\\u002B=;,\\?@\u0026_\\*]{1,14}$",
+                                        "validationMessage": "The value must be within 1 to 14 characters. It cannot contain the following: backslash, slash, double quote, single quote, square brackets, colon, pipe, angle brackets, plus sign, equals sign, semi-colon, comma, question mark, asterisk, at sign, ampersand, and underscore. Also, it cannot end with period or hyphen."
+                                    },
+                                    "visible": true
+                                },
+                                {
+                                    "name": "virtualMachineSize",
+                                    "type": "Microsoft.Compute.SizeSelector",
+                                    "label": "VM Size",
+                                    "toolTip": "Enter the size of the virtual machines migrating your data.",
+                                    "recommendedSizes": [
+                                        "Standard_D4as_v4"
+                                    ],
+                                    "constraints": {
+                                        "allowedSizes": [
+                                            "Standard_DS2_v2",
+                                            "Standard_DS3_v2",
+                                            "Standard_D4as_v4"
+                                        ]
+                                    },
+                                    "imageReference": {
+                                        "publisher": "MicrosoftWindowsServer",
+                                        "offer": "WindowsServer",
+                                        "sku": "2019-Datacenter"
+                                    },
+                                    "osPlatform": "Windows",
+                                    "visible": true,
+                                    "scope": {
+                                        "subscriptionId": "[steps('basics').resourceScope.subscription.subscriptionId]",
+                                        "location": "[steps('basics').resourceScope.location.name]"
+                                    }
+                                },
+                                {
+                                    "name": "virtualMachineInstances",
+                                    "type": "Microsoft.Common.Slider",
+                                    "label": "VM Instances",
+                                    "defaultValue": 2,
+                                    "toolTip": "Select the number of virtual machines needed to expedite your data migration.",
+                                    "min": 1,
+                                    "max": 9,
+                                    "showStepMarkers": true,
+                                    "constraints": {
+                                        "required": true
+                                    },
+                                    "visible": true
+                                },
+                                {
+                                    "name": "hybridUseBenefit",
+                                    "type": "Microsoft.Common.DropDown",
+                                    "label": "Hybrid Use Benefit",
+                                    "defaultValue": "no",
+                                    "toolTip": "This value determines whether the virtual machines in this solution should use the Hybrid Use Benefit for Windows Server. https://docs.microsoft.com/en-us/windows-server/get-started/azure-hybrid-benefit",
+                                    "constraints": {
+                                        "required": true,
+                                        "allowedValues": [
+                                            {
+                                                "label": "Yes",
+                                                "value": "yes"
+                                            },
+                                            {
+                                                "label": "No",
+                                                "value": "no"
+                                            }
+                                        ]
+                                    },
+                                    "visible": true
+                                }
+                            ]
+                        },
+                        {                            
+                            "name": "localAdminCredential",
+                            "type": "Microsoft.Common.Section",
+                            "visible": "true",
+                            "label": "Local Administrator Credential",
+                            "elements": [
+                                {
+                                    "name": "virtualMachineUsername",
+                                    "type": "Microsoft.Common.TextBox",
+                                    "label": "Username",
+                                    "defaultValue": "",
+                                    "placeholder": "Example: xadmin",
+                                    "toolTip": "Enter the username for the local administrator account.",
+                                    "constraints": {
+                                        "required": true,
+                                        "regex": "",
+                                        "validationMessage": ""
+                                    },
+                                    "visible": true
+                                },
+                                {
+                                    "name": "virtualMachinePassword",
+                                    "type": "Microsoft.Common.PasswordBox",
+                                    "label": {
+                                        "password": "Password",
+                                        "confirmPassword": "Confirm Password"
+                                    },
+                                    "toolTip": "The password must be alphanumeric, contain at least 12 characters, have at least 1 letter,1 number and 1 special character.",
+                                    "constraints": {
+                                        "required": true,
+                                        "regex": "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=_!*<>()])(?=\\S+$).{12,123}$",
+                                        "validationMessage": "Password must include 1 special character."
+                                    },
+                                    "options": {
+                                        "hideConfirmation": false
+                                    },
+                                    "visible": true
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "name": "storage",
+                    "label": "Storage",
+                    "elements": [
+                        {                            
+                            "name": "azureFiles",
+                            "type": "Microsoft.Common.Section",
+                            "visible": "true",
+                            "label": "Azure Files",
+                            "elements": [
+                                {
+                                    "name": "storageAccountName_checkNameAvailability",
+                                    "type": "Microsoft.Solutions.ArmApiControl",
+                                    "request": {
+                                        "method": "POST",
+                                        "path": "[concat(steps('basics').resourceScope.subscription.id,'/providers/Microsoft.Storage/checkNameAvailability?api-version=2016-01-01')]",
+                                        "body": {
+                                            "name": "[steps('basics').StorageAccountName]",
+                                            "type": "Microsoft.Storage/storageAccounts"
+                                        }
+                                    }
+                                },
+                                {
+                                    "name": "storageAccountName_rePUT",
+                                    "type": "Microsoft.Solutions.ArmApiControl",
+                                    "request": {
+                                        "method": "GET",
+                                        "path": "[concat(steps('basics').resourceScope.subscription.id,'/resourceGroups/',steps('basics').resourceScope.resourceGroup.name,'/providers/Microsoft.Storage/storageAccounts/',steps('basics').StorageAccountName,'?api-version=2016-01-01')]",
+                                        "body": {}
+                                    }
+                                },
+                                {
+                                    "name": "storageAccountName",
+                                    "type": "Microsoft.Common.TextBox",
+                                    "label": "Storage Account Name",
+                                    "defaultValue": "",
+                                    "toolTip": "The name of the storage account to store you migration data. The value must be 24 characters or less. Special characters are not allowed. The value must be in lowercase.",
+                                    "constraints": {
+                                        "required": true,
+                                        "validations": [
+                                            {
+                                                "isValid": "[or(steps('basics').StorageAccountName_checkNameAvailability.nameAvailable,equals(steps('basics').StorageAccountName_checkNameAvailability.reason,'AlreadyExists'))]",
+                                                "message": "[steps('basics').StorageAccountName_checkNameAvailability.message]"
+                                            },
+                                            {
+                                                "isValid": "[or(steps('basics').StorageAccountName_checkNameAvailability.nameAvailable,equals(steps('basics').StorageAccountName_rePUT.id,concat(steps('basics').resourceScope.subscription.id,'/resourceGroups/',steps('basics').resourceScope.resourceGroup.name,'/providers/Microsoft.Storage/storageAccounts/',steps('basics').StorageAccountName)),not(equals(steps('basics').StorageAccountName_checkNameAvailability.reason,'AlreadyExists')))]",
+                                                "message": "[steps('basics').StorageAccountName_checkNameAvailability.message]"
+                                            }
+                                        ]
+                                    },
+                                    "visible": true
+                                },
+                                {
+                                    "name": "fileShareName",
+                                    "type": "Microsoft.Common.TextBox",
+                                    "label": "File Share Name",
+                                    "defaultValue": "migration-data",
+                                    "toolTip": "The name of the file share in Azure Files.",
+                                    "constraints": {
+                                        "required": true,
+                                        "regex": "",
+                                        "validationMessage": ""
+                                    },
+                                    "visible": true
+                                },
+                                {
+                                    "name": "fileShareSize",
+                                    "type": "Microsoft.Common.Slider",
+                                    "label": "File Share Size",
+                                    "defaultValue": 100,
+                                    "toolTip": "The size in GB of the file share in Azure Files.",
+                                    "min": 100,
+                                    "max": 1000,
+                                    "showStepMarkers": true,
+                                    "constraints": {
+                                        "required": true
+                                    },
+                                    "visible": true
+                                }
+                            ]
+                        },
+                        {                            
+                            "name": "privateEndpointOptions",
+                            "type": "Microsoft.Common.Section",
+                            "visible": "true",
+                            "label": "Conditional Forwarder for Private Endpoint",
+                            "elements": [
+                                {
+                                    "name": "privateEndpointOptionsDescription",
+                                    "type": "Microsoft.Common.TextBlock",
+                                    "visible": true,
+                                    "options": {
+                                        "text": "The options below are only necessary if you plan to integrate this solution with your organization's networks and DNS.  A DNS server will be deployed with a conditional forwarder.  If you do not deploy a DNS server, the default Azure VIP will be configured on your virtual network as the DNS server and must be maintained for the solution to work."
+                                    }
+                                },
+                                {
+                                    "name": "dnsServer",
+                                    "type": "Microsoft.Common.OptionsGroup",
+                                    "label": "DNS Server",
+                                    "defaultValue": "Yes",
+                                    "toolTip": "This value determines whether a DNS Server is deployed. The server will be configured with the appropriate conditional forwarder to support the Private Endpoint on Azure Files.  This is only needed if you will integrate your organizations's DNS with the solution.",
+                                    "constraints": {
+                                        "required": true,
+                                        "allowedValues": [
+                                            {
+                                                "label": "Yes",
+                                                "value": true
+                                            },
+                                            {
+                                                "label": "No",
+                                                "value": false
+                                            }
+                                        ]
+                                    },
+                                    "visible": true
+                                },
+                                {
+                                    "name": "DnsServerName",
+                                    "type": "Microsoft.Common.TextBox",
+                                    "label": "DNS Server Name",
+                                    "defaultValue": "",
+                                    "toolTip": "Enter the name of the virtual machine for the DNS server.",
+                                    "constraints": {
+                                        "required": true,
+                                        "regex": "^(?!.*[.]$)(?!.*-$)[^\\/\\[\\]:|\u003C\u003E\\\u002B=;,\\?@\u0026_\\*]{1,15}$",
+                                        "validationMessage": "The value must be within 1 to 15 characters. It cannot contain the following: backslash, slash, double quote, single quote, square brackets, colon, pipe, angle brackets, plus sign, equals sign, semi-colon, comma, question mark, asterisk, at sign, ampersand, and underscore. Also, it cannot end with period or hyphen."
+                                    },
+                                    "visible": "[equals (steps('storage').privateEndpointOptions.dnsServer, true)]"
+                                },
+                                {
+                                    "name": "DnsServerSize",
+                                    "type": "Microsoft.Compute.SizeSelector",
+                                    "label": "DNS Server Size",
+                                    "toolTip": "Enter the size of the virtual machine for the DNS server.",
+                                    "recommendedSizes": [
+                                        "Standard_D2s_v4"
+                                    ],
+                                    "constraints": {
+                                        "allowedSizes": []
+                                    },
+                                    "imageReference": {
+                                        "publisher": "MicrosoftWindowsServer",
+                                        "offer": "WindowsServer",
+                                        "sku": "2019-Datacenter"
+                                    },
+                                    "osPlatform": "Windows",
+                                    "visible": "[equals (steps('storage').privateEndpointOptions.dnsServer, true)]",
+                                    "scope": {
+                                        "subscriptionId": "[steps('basics').resourceScope.subscription.subscriptionId]",
+                                        "location": "[steps('basics').resourceScope.location.name]"
+                                    }
+                                },
+                                {
+                                    "name": "DnsServerForwarderIPAddresses",
+                                    "type": "Microsoft.Common.TextBox",
+                                    "label": "Dns Server Forwarder IP Addresses",
+                                    "defaultValue": "",
+                                    "toolTip": "Enter the IP address for the Forwarder on the DNS Server.",
+                                    "constraints": {
+                                        "required": true,
+                                        "regex": "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$",
+                                        "validationMessage": "This value must be an IP Address in version 4 format."
+                                    },
+                                    "visible": "[equals (steps('storage').privateEndpointOptions.dnsServer, true)]"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        "outputs": {
+            "parameters": {
+                "BastionInstanceName": "[steps('remoteAccess').bastion.bastionName]",
+                "BastionSubnetPrefix": "[steps('remoteAccess').bastion.bastionSubnetPrefix]",
+                "DnsServer": "[steps('storage').privateEndpointOptions.dnsServer]",
+                "DnsServerForwarderIPAddresses": "[steps('storage').privateEndpointOptions.dnsServerForwarderIPAddresses]",
+                "DnsServerName": "[steps('storage').privateEndpointOptions.dnsServerName]",
+                "DnsServerSize": "[steps('storage').privateEndpointOptions.dnsServerSize]",
+                "FileShareName": "[steps('storage').azureFiles.fileShareName]",
+                "FileShareSize": "[steps('storage').azureFiles.fileShareSize]",
+                "HybridUseBenefit": "[steps('virtualMachines').generalSettings.hybridUseBenefit]",
+                "JumpHostSubnetName": "[steps('networking').subnets.jumpHostSubnetName]",
+                "JumpHostSubnetPrefix": "[steps('networking').subnets.jumpHostSubnetPrefix]",
+                "PrivateEndpointSubnetName": "[steps('networking').subnets.privateEndpointSubnetName]",
+                "PrivateEndpointSubnetPrefix": "[steps('networking').subnets.privateEndpointSubnetPrefix]",
+                "GatewaySubnetPrefix": "[steps('networking').subnets.gatewaySubnetPrefix]",
+                "StorageAccountName": "[steps('storage').azureFiles.storageAccountName]",
+                "VirtualNetworkName": "[steps('networking').virtualNetwork.virtualNetworkName]",
+                "VirtualNetworkAddressPrefix": "[steps('networking').virtualNetwork.virtualNetworkAddressPrefix]",
+                "VMSize": "[steps('virtualMachines').generalSettings.virtualMachineSize]",
+                "VMName": "[steps('virtualMachines').generalSettings.virtualMachineName]",
+                "VMInstances": "[steps('virtualMachines').generalSettings.virtualMachineInstances]",
+                "VMUsername": "[steps('virtualMachines').localAdminCredential.virtualMachineUsername]",
+                "VMPassword": "[steps('virtualMachines').localAdminCredential.virtualMachinePassword]"
+            },
+            "kind": "ResourceGroup",
+            "location": "[steps('basics').resourceScope.location.name]",
+            "resourceGroupId": "[steps('basics').resourceScope.resourceGroup.id]"
+        }
+    }
+}
