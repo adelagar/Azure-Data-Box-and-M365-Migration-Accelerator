@@ -11,12 +11,7 @@
                     "elements": [
                         {
                             "name": "resourceScope",
-                            "type": "Microsoft.Common.ResourceScope",
-                             "location": {
-                                "resourceTypes": [
-                                    "Microsoft.Resources/resourceGroups"
-                                ]
-                            }
+                            "type": "Microsoft.Common.ResourceScope"
                         },
                         {
                             "name": "requiredPermissions",
