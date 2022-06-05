@@ -1,94 +1,115 @@
-@description('Name of the Bastion Host instance')
+@maxLength(80)
+@minLength(1)
+@description('The name of the Azure Bastion Host.')
 param BastionInstanceName string = '<Enter a unique name for your BastionHost>'
 
-@description('Name of the Public IP Address for the Azure Bastion Host')
-param BastionPublicIpAddressName string = '<Enter a unique name for your Bastion PIP>'
+@description('The address prefix for the Azure Bastion subnet. This value must be in CIDR notation (e.g. 10.0.0.0/27) and the network prefix must be /27.')
+param BastionSubnetPrefix string = '10.230.1.0/27'
 
-@description('Conditionally deploys a DNS Server with the appropriate conditional forwarder to support the Private Endpoint on the Storage Account')
+@description('This value determines whether a DNS Server is deployed. The server will be configured with the appropriate conditional forwarder to support the Private Endpoint on Azure Files.  This is only needed if you will integrate your organizations\'s DNS with the solution.')
 param DnsServer bool = true
 
-@description('IP Address for the Forwarder on the DNS Server.')
-param DnsServerForwarderIPAddress string = ''
+@description('The IP address for the Forwarder on the DNS Server.')
+param DnsServerForwarderIPAddresses array = [
+  ''
+]
 
-@description('Name of the Virtual Machine for the DNS Server.')
+@maxLength(15)
+@minLength(1)
+@description('The name of the Virtual Machine for the DNS server. Due to NETBIOS restrictions in Windows, this value must be 15 characters or shorter.')
 param DnsServerName string = ''
 
-@description('The size of the virtual machine.')
+@description('The size of the virtual machine for the DNS server.')
 param DnsServerSize string = 'Standard_D2s_v4'
 
-@description('Name of the file share in Azure Files.')
+@maxLength(63)
+@minLength(3)
+@description('The name of the file share in Azure Files.')
 param FileShareName string = 'migration-data'
 
 @maxValue(1000)
 @minValue(100)
-@description('Size of the file share in Azure Files')
+@description('The size in GB of the file share in Azure Files.')
 param FileShareSize int = 100
 
-@description('Conditionally deploys the DNS Server with the Hybrid Use Benefit for Windows Server.')
 @allowed([
   'yes'
   'no'
 ])
+@description('This value determines whether the virtual machines in this solution should use the Hybrid Use Benefit for Windows Server. https://docs.microsoft.com/en-us/windows-server/get-started/azure-hybrid-benefit')
 param HybridUseBenefit string = 'no'
 
-@description('Jump Host Subnet ')
-param JumpHostSubnetName string = 'JUMPHOST-SUBNET'
+@maxLength(80)
+@minLength(1)
+@description('The name of the subnet for the jump host virtual machines.')
+param JumpHostSubnetName string = 'JumpHosts'
 
-@description('Private Endpoint Subnet for Storage')
-param PrivateEndpointSubnetName string = 'PRIVATE-ENDPOINT-SUBNET'
-
-@description('Enter the CIDR address for the JUMP Host Subnet')
+@description('The address prefix for the jump host subnet. This value must be in CIDR notation (e.g. 10.0.0.0/24).')
 param JumpHostSubnetPrefix string = '10.230.0.0/24'
 
-@description('CIDR address for the Azure Bastion subnet must be a /27')
-param BastionSubnetPrefix string = '10.230.1.0/27'
+@maxLength(80)
+@minLength(1)
+@description('The name of the subnet for the private endpoint on Azure Files.')
+param PrivateEndpointSubnetName string = 'PrivateEndpoint'
 
-@description('CIDR address for the Azure Bastion subnet must be a /27')
+@description('The address prefix for the Private Endpoint subnet. This value must be in CIDR notation (e.g. 10.0.0.0/27) and the network prefix must be /27.')
 param PrivateEndpointSubnetPrefix string = '10.230.2.0/27'
 
-@description('CIDR address for the GatewaySubnet subnet must be a /27')
+@description('The address prefix for the GatewaySubnet subnet. This value must be in CIDR notation (e.g. 10.0.0.0/27) and the network prefix must be /27.')
 param GatewaySubnetPrefix string = '10.230.3.0/27'
 
 @secure()
-@description('SAS Token for Azure Blob storage to host a private or custom version of this solution.')
+@description('The SAS Token for Azure Blob storage to host a private or custom version of this solution.  The default value of null may be used if deploying from GitHub.')
 param RepositorySasToken string = ''
 
-@description('URL to the repository for the code')
+@description('The URL to the repository for the code.  The default value may be used if deploying from GitHub.  However, if you network blocks public internet access or you would like to modify the code then you should host your own copy in a Azure Blobs.')
 param RepositoryUri string = 'https://raw.githubusercontent.com/jamasten/Azure-Data-Box-and-M365-Migration-Accelerator/main/'
 
-@description('Name of the migration storage account. Must not be more than 24 characters, no special characters, and lowercase')
+@maxLength(24)
+@minLength(3)
+@description('The name of the storage account to store you migration data. The value must be 24 characters or less. Special characters are not allowed. The value must be in lowercase.')
 param StorageAccountName string = '<Enter your storage account name here>'
 
 @description('The timestamp is used to rerun VM extensions when the template needs to be redeployed due to an error or update.')
 param Timestamp string = utcNow()
 
-@description('The name of the Hub virtual network provisioned for the deployment')
+@maxLength(64)
+@minLength(2)
+@description('The name of the virtual network.')
 param VirtualNetworkName string = '<Enter the name-of-your-vnet>'
 
-@description('Hub Virtual Network address CIDR.')
+@description('The address prefix for the virtual network. This value must be in CIDR notation (e.g. 10.0.0.0/21).')
 param VirtualNetworkAddressPrefix string = '10.230.0.0/21'
 
-@description('VM Size for the Migration  Server')
+
 @allowed([
   'Standard_DS2_v2' // should this be changed to a v4 size? // add sizes that use accelerated networking
   'Standard_DS3_v2' // should this be changed to a v4 size?
   'Standard_D4as_v4'
 ])
+@description('The size of the virtual machines migrating your data.')
 param VMSize string = 'Standard_DS2_v2'
 
-@description('Basic name pattern of vm not more than 15 characters we are appending the numerical number at end of the vm')
+@maxLength(14)
+@minLength(1)
+@description('The name prefix for the virtual machines migrating your data. Due to NETBIOS restrictions in Windows, this value must be 14 characters or shorter. One character is reserved for a number that will be appended to the end of the name.')
 param VMName string = 'M365-MIGVM'
 
-@description('Number of Migration Computers Needed')
+@maxValue(9)
+@minValue(1)
+@description('The number of virtual machines needed to expedite your data migration.')
 param VMInstances int = 2
 
-@description('Administrative Account')
+@maxLength(20)
+@minLength(1)
+@description('The username for the local administrator account.')
 param VMUsername string = 'xadmin'
 
-@description('Administrative Password')
 @secure()
+@description('The password for the local administrator account.')
 param VMPassword string
 
+var BastionPublicIpAddressName = '${BastionInstanceName}-pip'
 var DnsServerNetworkAddress = split(JumpHostSubnetPrefix, '/')[0]
 var DnsServerOctet0 = split(DnsServerNetworkAddress, '.')[0]
 var DnsServerOctet1 = split(DnsServerNetworkAddress, '.')[1]
@@ -97,12 +118,13 @@ var DnsServerOctet3 = split(DnsServerNetworkAddress, '.')[3]
 var DnsServerIpNumber = DnsServerOctet3 == '0' ? 4 : int(DnsServerOctet3) + 4
 var DnsServerIpAddress = '${DnsServerOctet0}.${DnsServerOctet1}.${DnsServerOctet2}.${DnsServerIpNumber}'
 var Location = resourceGroup().location
+var MicrosoftDnsServer = '168.63.129.16'
 var PrivateDnsZoneName = 'privatelink.file.${StorageSuffix}'
-var PrivateEndpointName = '${StorageAccountName}-PE'
+var PrivateEndpointName = '${StorageAccountName}-pe'
 var StorageSuffix = environment().suffixes.storage
 
 resource networkSecurityGroup 'Microsoft.Network/networkSecurityGroups@2018-08-01' = {
-  name: 'NSG-01'
+  name: '${JumpHostSubnetName}-nsg'
   location: Location
   properties: {
     securityRules: [
@@ -137,8 +159,11 @@ resource virtualNetwork 'Microsoft.Network/virtualNetworks@2019-11-01' = {
       ]
     }
     dhcpOptions: {
-      dnsServers: [
-        DnsServer ? DnsServerIpAddress : '168.63.129.16'
+      dnsServers: DnsServer ? [
+        DnsServerIpAddress
+        MicrosoftDnsServer
+      ] : [
+        MicrosoftDnsServer
       ]
     }
     subnets: [
@@ -304,7 +329,7 @@ resource virtualNetworkLink 'Microsoft.Network/privateDnsZones/virtualNetworkLin
 }
 
 resource networkInterface_DnsServer 'Microsoft.Network/networkInterfaces@2020-05-01' = if(DnsServer) {
-  name: '${DnsServerName}-NIC'
+  name: '${DnsServerName}-nic'
   location: Location
   properties: {
     ipConfigurations: [
@@ -321,13 +346,9 @@ resource networkInterface_DnsServer 'Microsoft.Network/networkInterfaces@2020-05
         }
       }
     ]
-    dnsSettings: {
-      dnsServers: []
-    }
     enableAcceleratedNetworking: false
     enableIPForwarding: false
   }
-  dependsOn: []
 }
 
 resource virtualMachine_DnsServer 'Microsoft.Compute/virtualMachines@2019-07-01' = if(DnsServer) {
@@ -346,7 +367,7 @@ resource virtualMachine_DnsServer 'Microsoft.Compute/virtualMachines@2019-07-01'
       }
       osDisk: {
         osType: 'Windows'
-        name: '${DnsServerName}-OSDISK'
+        name: '${DnsServerName}-osdisk'
         createOption: 'FromImage'
         caching: 'ReadWrite'
         managedDisk: {
@@ -389,18 +410,17 @@ resource dscExtension_DnsServer 'Microsoft.Compute/virtualMachines/extensions@20
     type: 'DSC'
     typeHandlerVersion: '2.77'
     settings: {
-      modulesUrl: 'configurations/dnsForwarders.zip'
+      modulesUrl: '${RepositoryUri}configurations/dnsForwarders.zip${RepositorySasToken}'
       configurationFunction: 'dnsForwarders.ps1\\dnsForwarders'
       configurationArguments: {
         ActionAfterReboot: 'ContinueConfiguration'
         ConfigurationMode: 'ApplyandAutoCorrect'
         RebootNodeIfNeeded: true
-        //IPAddresses: DnsForwarderIPAddress
       }
       properties: [
         {
           Name: 'ForwarderIPAddresses'
-          Value: DnsServerForwarderIPAddress
+          Value: DnsServerForwarderIPAddresses
           TypeName: 'System.Array'
         }
         {
@@ -414,11 +434,11 @@ resource dscExtension_DnsServer 'Microsoft.Compute/virtualMachines/extensions@20
   }
 }
 
-resource networkInterfaces_MigrationServers 'Microsoft.Network/networkInterfaces@2019-11-01' = [for i in range(0, VMInstances): {
-  name: '${VMName}-NIC-${(i + 1)}'
+resource networkInterfaces_MigrationServers 'Microsoft.Network/networkInterfaces@2019-11-01' = [for i in range(1, VMInstances): {
+  name: '${VMName}${i}-nic'
   location: Location
   tags: {
-    displayName: '${VMName}-NIC-${(i + 1)}'
+    displayName: '${VMName}${i}-nic'
   }
   properties: {
     ipConfigurations: [
@@ -433,20 +453,23 @@ resource networkInterfaces_MigrationServers 'Microsoft.Network/networkInterfaces
       }
     ]
   }
+  dependsOn: [
+    dscExtension_DnsServer
+  ]
 }]
 
-resource virtualMachines_MigrationServers 'Microsoft.Compute/virtualMachines@2019-07-01' = [for i in range(0, VMInstances): {
-  name: '${VMName}-${(i + 1)}'
+resource virtualMachines_MigrationServers 'Microsoft.Compute/virtualMachines@2019-07-01' = [for i in range(1, VMInstances): {
+  name: '${VMName}${i}'
   location: Location
   tags: {
-    displayName: '${VMName}${(i + 1)}'
+    displayName: '${VMName}${i}'
   }
   properties: {
     hardwareProfile: {
       vmSize: VMSize
     }
     osProfile: {
-      computerName: '${VMName}-${(i + 1)}'
+      computerName: '${VMName}${i}'
       adminUsername: VMUsername
       adminPassword: VMPassword
     }
@@ -459,11 +482,11 @@ resource virtualMachines_MigrationServers 'Microsoft.Compute/virtualMachines@201
       }
       osDisk: {
         osType: 'Windows'
-        name: '${VMName}-${(i + 1)}-OSDISK'
+        name: '${VMName}${i}-osdisk'
         caching: 'ReadWrite'
         createOption: 'FromImage'
         managedDisk: {
-          storageAccountType: 'Standard_LRS'
+          storageAccountType: 'Premium_LRS'
         }
         diskSizeGB: 127
       }
@@ -472,7 +495,7 @@ resource virtualMachines_MigrationServers 'Microsoft.Compute/virtualMachines@201
     networkProfile: {
       networkInterfaces: [
         {
-          id: networkInterfaces_MigrationServers[i].id
+          id: networkInterfaces_MigrationServers[(i-1)].id
         }
       ]
     }
@@ -480,8 +503,8 @@ resource virtualMachines_MigrationServers 'Microsoft.Compute/virtualMachines@201
   }
 }]
 
-resource customScriptExtension_MigrationServers 'Microsoft.Compute/virtualMachines/extensions@2021-03-01' = [for i in range(0, VMInstances): {
-  parent: virtualMachines_MigrationServers[i]
+resource customScriptExtension_MigrationServers 'Microsoft.Compute/virtualMachines/extensions@2021-03-01' = [for i in range(1, VMInstances): {
+  parent: virtualMachines_MigrationServers[(i-1)]
   name: 'CustomScriptExtension'
   location: Location
   tags: {}
@@ -497,7 +520,7 @@ resource customScriptExtension_MigrationServers 'Microsoft.Compute/virtualMachin
       timestamp: Timestamp
     }
     protectedSettings: {
-      commandToExecute: 'powershell -ExecutionPolicy Unrestricted -File Add-AzureFileShare.ps1 -ShareName ${FileShareName} -StorageAccountName ${StorageAccountName} -StorageKey ${storageAccount.listKeys().keys[0].value} -StorageSuffix ${StorageSuffix} -VMUsername ${VMUsername} -VMPassword ${VMPassword}'
+      commandToExecute: 'powershell -ExecutionPolicy Unrestricted -File Add-AzureFileShare.ps1 -ShareName ${FileShareName} -StorageAccountName ${StorageAccountName} -StorageKey ${storageAccount.listKeys().keys[0].value} -StorageSuffix ${StorageSuffix}'
     }
   }
 }]
