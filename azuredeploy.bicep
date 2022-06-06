@@ -15,7 +15,7 @@ param DnsServerForwarderIPAddresses array = []
 @maxLength(15)
 @minLength(1)
 @description('The name of the Virtual Machine for the DNS server. Due to NETBIOS restrictions in Windows, this value must be 15 characters or shorter.')
-param DnsServerName string = ''
+param DnsServerName string = 'vmdns'
 
 @description('The size of the virtual machine for the DNS server.')
 param DnsServerSize string = 'Standard_D2s_v4'
