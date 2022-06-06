@@ -489,7 +489,7 @@
                                     "toolTip": "Enter the IP address for the second Forwarder on the DNS Server.",
                                     "constraints": {
                                         "required": false,
-                                        "regex": "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$",
+                                        "regex": "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$|^$",
                                         "validationMessage": "This value must be an IP Address in version 4 format."
                                     },
                                     "visible": "[equals (steps('storage').privateEndpointOptions.dnsServer, true)]"
