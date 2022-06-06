@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.6.18.56646",
-      "templateHash": "11964096701739040898"
+      "templateHash": "17750193358653652492"
     }
   },
   "parameters": {
@@ -31,10 +31,16 @@
         "description": "This value determines whether a DNS Server is deployed. The server will be configured with the appropriate conditional forwarder to support the Private Endpoint on Azure Files.  This is only needed if you will integrate your organizations's DNS with the solution."
       }
     },
-    "DnsServerForwarderIPAddresses": {
-      "type": "array",
+    "DnsServerForwarderIPAddress01": {
+      "type": "string",
       "metadata": {
-        "description": "The IP address for the Forwarder on the DNS Server."
+        "description": "The IP address for the first Forwarder on the DNS Server."
+      }
+    },
+    "DnsServerForwarderIPAddress02": {
+      "type": "string",
+      "metadata": {
+        "description": "The IP address for the second Forwarder on the DNS Server."
       }
     },
     "DnsServerName": {
@@ -208,6 +214,7 @@
   },
   "variables": {
     "BastionPublicIpAddressName": "[format('{0}-pip', parameters('BastionInstanceName'))]",
+    "DnsServerForwarderIPAddresses": "[if(empty(parameters('DnsServerForwarderIPAddress02')), createArray(parameters('DnsServerForwarderIPAddress01')), createArray(parameters('DnsServerForwarderIPAddress01'), parameters('DnsServerForwarderIPAddress02')))]",
     "DnsServerNetworkAddress": "[split(parameters('JumpHostSubnetPrefix'), '/')[0]]",
     "DnsServerOctet0": "[split(variables('DnsServerNetworkAddress'), '.')[0]]",
     "DnsServerOctet1": "[split(variables('DnsServerNetworkAddress'), '.')[1]]",
@@ -539,7 +546,7 @@
   "outputs": {
     "forwarderIpAddresses": {
       "type": "array",
-      "value": "[parameters('DnsServerForwarderIPAddresses')]"
+      "value": "[variables('DnsServerForwarderIPAddresses')]"
     }
   }
 }
