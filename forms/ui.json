@@ -292,23 +292,20 @@
                                 },
                                 {
                                     "name": "virtualMachinePassword",
-                                    "type": "Microsoft.Compute.CredentialsCombo",
+                                    "type": "Microsoft.Common.PasswordBox",
                                     "label": {
                                         "password": "Password",
                                         "confirmPassword": "Confirm Password"
                                     },
-                                    "toolTip": {
-                                        "password": "Enter the password for the local administrator account."
-                                    },
+                                    "toolTip": "The password must be alphanumeric, contain at least 12 characters, have at least 1 letter, 1 number and 1 special character.",
                                     "constraints": {
                                         "required": true,
-                                        "customPasswordRegex": "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{12,}$",
-                                        "customValidationMessage": "The password must be alphanumeric, contain at least 12 characters, and have at least 1 letter and 1 number."
+                                        "regex": "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=_!*<>()])(?=\\S+$).{12,123}$",
+                                        "validationMessage": "The value must be within 12 to 123 characters, be alphanumeric, and include 1 lower case character, 1 upper case character, 1 number, and 1 special character that is not '\\' or '-'."
                                     },
                                     "options": {
                                         "hideConfirmation": false
                                     },
-                                    "osPlatform": "Windows",
                                     "visible": true
                                 }
                             ]
