@@ -396,7 +396,7 @@ resource virtualMachine_DnsServer 'Microsoft.Compute/virtualMachines@2019-07-01'
     licenseType: ((HybridUseBenefit == 'yes') ? 'Windows_Server' : json('null'))
   }
 }
-
+/* 
 resource dscExtension_DnsServer 'Microsoft.Compute/virtualMachines/extensions@2019-07-01' = if(DnsServer) {
   parent: virtualMachine_DnsServer
   name: 'DSC'
@@ -522,3 +522,6 @@ resource customScriptExtension_MigrationServers 'Microsoft.Compute/virtualMachin
     }
   }
 }]
+ */
+
+ output forwarderIpAddresses array = DnsServerForwarderIPAddresses
