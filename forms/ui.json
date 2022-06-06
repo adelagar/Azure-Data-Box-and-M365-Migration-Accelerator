@@ -469,46 +469,28 @@
                                     }
                                 },
                                 {
-                                    "name": "dnsServerForwarderIPAddressesHeader",
-                                    "type": "Microsoft.Common.TextBlock",
-                                    "visible": true,
-                                    "options": {
-                                        "text": "Forwarder IP Addresses"
-                                    }
+                                    "name": "dnsServerForwarderIPAddresses1",
+                                    "type": "Microsoft.Common.TextBox",
+                                    "label": "Forwarder IP Address 01",
+                                    "defaultValue": "",
+                                    "toolTip": "Enter the IP address for the first Forwarder on the DNS Server.",
+                                    "constraints": {
+                                        "required": true,
+                                        "regex": "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$",
+                                        "validationMessage": "This value must be an IP Address in version 4 format."
+                                    },
+                                    "visible": "[equals (steps('storage').privateEndpointOptions.dnsServer, true)]"
                                 },
                                 {
-                                    "name": "dnsServerForwarderIPAddresses",
-                                    "type": "Microsoft.Common.EditableGrid",
-                                    "ariaLabel": "Enter the IP address for the second Forwarder on the DNS Server.",
-                                    "label": "Forwarder IP Addresses",
+                                    "name": "dnsServerForwarderIPAddresses2",
+                                    "type": "Microsoft.Common.TextBox",
+                                    "label": "Forwarder IP Address 02",
+                                    "defaultValue": "",
+                                    "toolTip": "Enter the IP address for the second Forwarder on the DNS Server.",
                                     "constraints": {
-                                        "width": "Full",
-                                        "rows": {
-                                            "count": {
-                                                "min": 1,
-                                                "max": 2
-                                            }
-                                        },
-                                        "columns": [
-                                            {
-                                                "id": "ipAddresses",
-                                                "header": "IPv4 Address",
-                                                "width": "1fr",
-                                                "element": {
-                                                    "type": "Microsoft.Common.TextBox",
-                                                    "placeholder": "10.0.0.4",
-                                                    "constraints": {
-                                                        "required": true,
-                                                        "validations": [
-                                                            {
-                                                                "regex": "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$",
-                                                                "message": "This value must be an IP Address in version 4 format."
-                                                            }
-                                                        ]
-                                                    }
-                                                }
-                                            }
-                                        ]
+                                        "required": false,
+                                        "regex": "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$",
+                                        "validationMessage": "This value must be an IP Address in version 4 format."
                                     },
                                     "visible": "[equals (steps('storage').privateEndpointOptions.dnsServer, true)]"
                                 }
@@ -523,7 +505,10 @@
                 "BastionInstanceName": "[steps('remoteAccess').bastion.bastionName]",
                 "BastionSubnetPrefix": "[steps('remoteAccess').bastion.bastionSubnetPrefix]",
                 "DnsServer": "[steps('storage').privateEndpointOptions.dnsServer]",
-                "DnsServerForwarderIPAddresses": "[steps('storage').privateEndpointOptions.dnsServerForwarderIPAddresses.ipAddresses]",
+                "DnsServerForwarderIPAddresses": [
+                    "[if(equals(steps('storage').privateEndpointOptions.dnsServer, true), steps('storage').privateEndpointOptions.dnsServerForwarderIPAddresses1, '168.63.129.16']",
+                    "[if(equals(steps('storage').privateEndpointOptions.dnsServer, true), steps('storage').privateEndpointOptions.dnsServerForwarderIPAddresses2, '168.63.129.16']"
+                ],
                 "DnsServerName": "[if(equals(steps('storage').privateEndpointOptions.dnsServer, true), steps('storage').privateEndpointOptions.dnsServerName, 'vmmgrtdns')]",
                 "DnsServerSize": "[if(equals(steps('storage').privateEndpointOptions.dnsServer, true), steps('storage').privateEndpointOptions.dnsServerSize, 'Standard_D2s_v4')]",
                 "FileShareName": "[steps('storage').azureFiles.fileShareName]",
