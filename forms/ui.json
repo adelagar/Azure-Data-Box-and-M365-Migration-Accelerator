@@ -506,8 +506,8 @@
                 "BastionSubnetPrefix": "[steps('remoteAccess').bastion.bastionSubnetPrefix]",
                 "DnsServer": "[steps('storage').privateEndpointOptions.dnsServer]",
                 "DnsServerForwarderIPAddresses": [
-                    "[if(equals(steps('storage').privateEndpointOptions.dnsServer, true), steps('storage').privateEndpointOptions.dnsServerForwarderIPAddresses1, '168.63.129.16')]",
-                    "[if(equals(steps('storage').privateEndpointOptions.dnsServer, true), steps('storage').privateEndpointOptions.dnsServerForwarderIPAddresses2, '168.63.129.16')]"
+                    "[if(equals(steps('storage').privateEndpointOptions.dnsServer, ''), '168.63.129.16', steps('storage').privateEndpointOptions.dnsServerForwarderIPAddresses1)]",
+                    "[if(equals(steps('storage').privateEndpointOptions.dnsServer, ''), '168.63.129.16', steps('storage').privateEndpointOptions.dnsServerForwarderIPAddresses2)]"
                 ],
                 "DnsServerName": "[if(equals(steps('storage').privateEndpointOptions.dnsServer, true), steps('storage').privateEndpointOptions.dnsServerName, 'vmmgrtdns')]",
                 "DnsServerSize": "[if(equals(steps('storage').privateEndpointOptions.dnsServer, true), steps('storage').privateEndpointOptions.dnsServerSize, 'Standard_D2s_v4')]",
