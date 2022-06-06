@@ -1,7 +1,7 @@
 @maxLength(80)
 @minLength(1)
 @description('The name of the Azure Bastion Host.')
-param BastionInstanceName string = '<Enter a unique name for your BastionHost>'
+param BastionInstanceName string
 
 @description('The address prefix for the Azure Bastion subnet. This value must be in CIDR notation (e.g. 10.0.0.0/27) and the network prefix must be /27.')
 param BastionSubnetPrefix string = '10.230.1.0/27'
@@ -10,9 +10,7 @@ param BastionSubnetPrefix string = '10.230.1.0/27'
 param DnsServer bool = true
 
 @description('The IP address for the Forwarder on the DNS Server.')
-param DnsServerForwarderIPAddresses array = [
-  ''
-]
+param DnsServerForwarderIPAddresses array = []
 
 @maxLength(15)
 @minLength(1)
@@ -25,7 +23,7 @@ param DnsServerSize string = 'Standard_D2s_v4'
 @maxLength(63)
 @minLength(3)
 @description('The name of the file share in Azure Files.')
-param FileShareName string = 'migration-data'
+param FileShareName string
 
 @maxValue(1000)
 @minValue(100)
@@ -42,7 +40,7 @@ param HybridUseBenefit string = 'no'
 @maxLength(80)
 @minLength(1)
 @description('The name of the subnet for the jump host virtual machines.')
-param JumpHostSubnetName string = 'JumpHosts'
+param JumpHostSubnetName string
 
 @description('The address prefix for the jump host subnet. This value must be in CIDR notation (e.g. 10.0.0.0/24).')
 param JumpHostSubnetPrefix string = '10.230.0.0/24'
@@ -50,7 +48,7 @@ param JumpHostSubnetPrefix string = '10.230.0.0/24'
 @maxLength(80)
 @minLength(1)
 @description('The name of the subnet for the private endpoint on Azure Files.')
-param PrivateEndpointSubnetName string = 'PrivateEndpoint'
+param PrivateEndpointSubnetName string
 
 @description('The address prefix for the Private Endpoint subnet. This value must be in CIDR notation (e.g. 10.0.0.0/27) and the network prefix must be /27.')
 param PrivateEndpointSubnetPrefix string = '10.230.2.0/27'
@@ -68,7 +66,7 @@ param RepositoryUri string = 'https://raw.githubusercontent.com/jamasten/Azure-D
 @maxLength(24)
 @minLength(3)
 @description('The name of the storage account to store you migration data. The value must be 24 characters or less. Special characters are not allowed. The value must be in lowercase.')
-param StorageAccountName string = '<Enter your storage account name here>'
+param StorageAccountName string
 
 @description('The timestamp is used to rerun VM extensions when the template needs to be redeployed due to an error or update.')
 param Timestamp string = utcNow()
@@ -76,7 +74,7 @@ param Timestamp string = utcNow()
 @maxLength(64)
 @minLength(2)
 @description('The name of the virtual network.')
-param VirtualNetworkName string = '<Enter the name-of-your-vnet>'
+param VirtualNetworkName string
 
 @description('The address prefix for the virtual network. This value must be in CIDR notation (e.g. 10.0.0.0/21).')
 param VirtualNetworkAddressPrefix string = '10.230.0.0/21'
@@ -93,7 +91,7 @@ param VMSize string = 'Standard_DS2_v2'
 @maxLength(14)
 @minLength(1)
 @description('The name prefix for the virtual machines migrating your data. Due to NETBIOS restrictions in Windows, this value must be 14 characters or shorter. One character is reserved for a number that will be appended to the end of the name.')
-param VMName string = 'M365-MIGVM'
+param VMName string
 
 @maxValue(9)
 @minValue(1)
@@ -103,7 +101,7 @@ param VMInstances int = 2
 @maxLength(20)
 @minLength(1)
 @description('The username for the local administrator account.')
-param VMUsername string = 'xadmin'
+param VMUsername string
 
 @secure()
 @description('The password for the local administrator account.')

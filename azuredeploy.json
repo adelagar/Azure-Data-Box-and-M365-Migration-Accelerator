@@ -5,13 +5,12 @@
     "_generator": {
       "name": "bicep",
       "version": "0.6.18.56646",
-      "templateHash": "13032673850004926848"
+      "templateHash": "3815447172759181210"
     }
   },
   "parameters": {
     "BastionInstanceName": {
       "type": "string",
-      "defaultValue": "<Enter a unique name for your BastionHost>",
       "metadata": {
         "description": "The name of the Azure Bastion Host."
       },
@@ -34,9 +33,7 @@
     },
     "DnsServerForwarderIPAddresses": {
       "type": "array",
-      "defaultValue": [
-        ""
-      ],
+      "defaultValue": [],
       "metadata": {
         "description": "The IP address for the Forwarder on the DNS Server."
       }
@@ -59,7 +56,6 @@
     },
     "FileShareName": {
       "type": "string",
-      "defaultValue": "migration-data",
       "metadata": {
         "description": "The name of the file share in Azure Files."
       },
@@ -88,7 +84,6 @@
     },
     "JumpHostSubnetName": {
       "type": "string",
-      "defaultValue": "JumpHosts",
       "metadata": {
         "description": "The name of the subnet for the jump host virtual machines."
       },
@@ -104,7 +99,6 @@
     },
     "PrivateEndpointSubnetName": {
       "type": "string",
-      "defaultValue": "PrivateEndpoint",
       "metadata": {
         "description": "The name of the subnet for the private endpoint on Azure Files."
       },
@@ -141,7 +135,6 @@
     },
     "StorageAccountName": {
       "type": "string",
-      "defaultValue": "<Enter your storage account name here>",
       "metadata": {
         "description": "The name of the storage account to store you migration data. The value must be 24 characters or less. Special characters are not allowed. The value must be in lowercase."
       },
@@ -157,7 +150,6 @@
     },
     "VirtualNetworkName": {
       "type": "string",
-      "defaultValue": "<Enter the name-of-your-vnet>",
       "metadata": {
         "description": "The name of the virtual network."
       },
@@ -185,7 +177,6 @@
     },
     "VMName": {
       "type": "string",
-      "defaultValue": "M365-MIGVM",
       "metadata": {
         "description": "The name prefix for the virtual machines migrating your data. Due to NETBIOS restrictions in Windows, this value must be 14 characters or shorter. One character is reserved for a number that will be appended to the end of the name."
       },
@@ -203,7 +194,6 @@
     },
     "VMUsername": {
       "type": "string",
-      "defaultValue": "xadmin",
       "metadata": {
         "description": "The username for the local administrator account."
       },
