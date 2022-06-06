@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.6.18.56646",
-      "templateHash": "2103890561169256300"
+      "templateHash": "15645951923465603056"
     }
   },
   "parameters": {
@@ -543,12 +543,158 @@
       "dependsOn": [
         "[resourceId('Microsoft.Network/networkInterfaces', format('{0}-nic', parameters('DnsServerName')))]"
       ]
+    },
+    {
+      "condition": "[parameters('DnsServer')]",
+      "type": "Microsoft.Compute/virtualMachines/extensions",
+      "apiVersion": "2019-07-01",
+      "name": "[format('{0}/{1}', parameters('DnsServerName'), 'DSC')]",
+      "location": "[variables('Location')]",
+      "properties": {
+        "forceUpdateTag": "[parameters('Timestamp')]",
+        "autoUpgradeMinorVersion": true,
+        "publisher": "Microsoft.Powershell",
+        "type": "DSC",
+        "typeHandlerVersion": "2.77",
+        "settings": {
+          "modulesUrl": "[format('{0}configurations/dnsForwarders.zip{1}', parameters('RepositoryUri'), parameters('RepositorySasToken'))]",
+          "configurationFunction": "dnsForwarders.ps1\\dnsForwarders",
+          "configurationArguments": {
+            "ActionAfterReboot": "ContinueConfiguration",
+            "ConfigurationMode": "ApplyandAutoCorrect",
+            "RebootNodeIfNeeded": true
+          },
+          "properties": [
+            {
+              "Name": "ForwarderIPAddresses",
+              "Value": "[variables('DnsServerForwarderIPAddresses')]",
+              "TypeName": "System.Array"
+            },
+            {
+              "Name": "StorageSuffix",
+              "Value": "[variables('StorageSuffix')]",
+              "TypeName": "System.String"
+            }
+          ]
+        },
+        "protectedSettings": {}
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Compute/virtualMachines', parameters('DnsServerName'))]"
+      ]
+    },
+    {
+      "copy": {
+        "name": "networkInterfaces_MigrationServers",
+        "count": "[length(range(1, parameters('VMInstances')))]"
+      },
+      "type": "Microsoft.Network/networkInterfaces",
+      "apiVersion": "2019-11-01",
+      "name": "[format('{0}{1}-nic', parameters('VMName'), range(1, parameters('VMInstances'))[copyIndex()])]",
+      "location": "[variables('Location')]",
+      "tags": {
+        "displayName": "[format('{0}{1}-nic', parameters('VMName'), range(1, parameters('VMInstances'))[copyIndex()])]"
+      },
+      "properties": {
+        "ipConfigurations": [
+          {
+            "name": "ipConfig1",
+            "properties": {
+              "privateIPAllocationMethod": "Dynamic",
+              "subnet": {
+                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('VirtualNetworkName'), parameters('JumpHostSubnetName'))]"
+              }
+            }
+          }
+        ]
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Compute/virtualMachines/extensions', parameters('DnsServerName'), 'DSC')]",
+        "[resourceId('Microsoft.Network/virtualNetworks', parameters('VirtualNetworkName'))]"
+      ]
+    },
+    {
+      "copy": {
+        "name": "virtualMachines_MigrationServers",
+        "count": "[length(range(1, parameters('VMInstances')))]"
+      },
+      "type": "Microsoft.Compute/virtualMachines",
+      "apiVersion": "2019-07-01",
+      "name": "[format('{0}{1}', parameters('VMName'), range(1, parameters('VMInstances'))[copyIndex()])]",
+      "location": "[variables('Location')]",
+      "tags": {
+        "displayName": "[format('{0}{1}', parameters('VMName'), range(1, parameters('VMInstances'))[copyIndex()])]"
+      },
+      "properties": {
+        "hardwareProfile": {
+          "vmSize": "[parameters('VMSize')]"
+        },
+        "osProfile": {
+          "computerName": "[format('{0}{1}', parameters('VMName'), range(1, parameters('VMInstances'))[copyIndex()])]",
+          "adminUsername": "[parameters('VMUsername')]",
+          "adminPassword": "[parameters('VMPassword')]"
+        },
+        "storageProfile": {
+          "imageReference": {
+            "publisher": "MicrosoftWindowsServer",
+            "offer": "WindowsServer",
+            "sku": "2019-Datacenter",
+            "version": "latest"
+          },
+          "osDisk": {
+            "osType": "Windows",
+            "name": "[format('{0}{1}-osdisk', parameters('VMName'), range(1, parameters('VMInstances'))[copyIndex()])]",
+            "caching": "ReadWrite",
+            "createOption": "FromImage",
+            "managedDisk": {
+              "storageAccountType": "Premium_LRS"
+            },
+            "diskSizeGB": 127
+          },
+          "dataDisks": []
+        },
+        "networkProfile": {
+          "networkInterfaces": [
+            {
+              "id": "[resourceId('Microsoft.Network/networkInterfaces', format('{0}{1}-nic', parameters('VMName'), range(1, parameters('VMInstances'))[sub(range(1, parameters('VMInstances'))[copyIndex()], 1)]))]"
+            }
+          ]
+        },
+        "licenseType": "[if(equals(parameters('HybridUseBenefit'), 'yes'), 'Windows_Server', json('null'))]"
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Network/networkInterfaces', format('{0}{1}-nic', parameters('VMName'), range(1, parameters('VMInstances'))[sub(range(1, parameters('VMInstances'))[copyIndex()], 1)]))]"
+      ]
+    },
+    {
+      "copy": {
+        "name": "customScriptExtension_MigrationServers",
+        "count": "[length(range(1, parameters('VMInstances')))]"
+      },
+      "type": "Microsoft.Compute/virtualMachines/extensions",
+      "apiVersion": "2021-03-01",
+      "name": "[format('{0}/{1}', format('{0}{1}', parameters('VMName'), range(1, parameters('VMInstances'))[sub(range(1, parameters('VMInstances'))[copyIndex()], 1)]), 'CustomScriptExtension')]",
+      "location": "[variables('Location')]",
+      "tags": {},
+      "properties": {
+        "publisher": "Microsoft.Compute",
+        "type": "CustomScriptExtension",
+        "typeHandlerVersion": "1.10",
+        "autoUpgradeMinorVersion": true,
+        "settings": {
+          "fileUris": [
+            "[format('{0}scripts/Add-AzureFileShare.ps1{1}', parameters('RepositoryUri'), parameters('RepositorySasToken'))]"
+          ],
+          "timestamp": "[parameters('Timestamp')]"
+        },
+        "protectedSettings": {
+          "commandToExecute": "[format('powershell -ExecutionPolicy Unrestricted -File Add-AzureFileShare.ps1 -ShareName {0} -StorageAccountName {1} -StorageKey {2} -StorageSuffix {3}', parameters('FileShareName'), parameters('StorageAccountName'), listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('StorageAccountName')), '2021-06-01').keys[0].value, variables('StorageSuffix'))]"
+        }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Storage/storageAccounts', parameters('StorageAccountName'))]",
+        "[resourceId('Microsoft.Compute/virtualMachines', format('{0}{1}', parameters('VMName'), range(1, parameters('VMInstances'))[sub(range(1, parameters('VMInstances'))[copyIndex()], 1)]))]"
+      ]
     }
-  ],
-  "outputs": {
-    "forwarderIpAddresses": {
-      "type": "array",
-      "value": "[variables('DnsServerForwarderIPAddresses')]"
-    }
-  }
+  ]
 }
