@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.6.18.56646",
-      "templateHash": "9655121634387136769"
+      "templateHash": "11964096701739040898"
     }
   },
   "parameters": {
@@ -33,7 +33,6 @@
     },
     "DnsServerForwarderIPAddresses": {
       "type": "array",
-      "defaultValue": [],
       "metadata": {
         "description": "The IP address for the Forwarder on the DNS Server."
       }
