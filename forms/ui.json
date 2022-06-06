@@ -506,7 +506,7 @@
                 "BastionSubnetPrefix": "[steps('remoteAccess').bastion.bastionSubnetPrefix]",
                 "DnsServer": "[steps('storage').privateEndpointOptions.dnsServer]",
                 "DnsServerForwarderIPAddress01": "[if(equals(steps('storage').privateEndpointOptions.dnsServer, true), steps('storage').privateEndpointOptions.dnsServerForwarderIPAddress1, '')]",
-                "DnsServerForwarderIPAddress02": "[if(equals(steps('storage').privateEndpointOptions.dnsServer, true), steps('storage').privateEndpointOptions.dnsServerForwarderIPAddress2, '')]",
+                "DnsServerForwarderIPAddress02": "[if(and(equals(steps('storage').privateEndpointOptions.dnsServer, true), not(empty(steps('storage').privateEndpointOptions.dnsServerForwarderIPAddress2))), steps('storage').privateEndpointOptions.dnsServerForwarderIPAddress2, '')]",
                 "DnsServerName": "[if(equals(steps('storage').privateEndpointOptions.dnsServer, true), steps('storage').privateEndpointOptions.dnsServerName, 'vmmgrtdns')]",
                 "DnsServerSize": "[if(equals(steps('storage').privateEndpointOptions.dnsServer, true), steps('storage').privateEndpointOptions.dnsServerSize, 'Standard_D2s_v4')]",
                 "FileShareName": "[steps('storage').azureFiles.fileShareName]",
