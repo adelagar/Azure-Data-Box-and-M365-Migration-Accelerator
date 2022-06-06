@@ -380,9 +380,9 @@
                                 {
                                     "name": "fileShareSize",
                                     "type": "Microsoft.Common.Slider",
-                                    "label": "File Share Size",
+                                    "label": "File Share Size (GiB)",
                                     "defaultValue": 100,
-                                    "toolTip": "The size in GB of the file share in Azure Files.",
+                                    "toolTip": "The size in GiB of the file share in Azure Files.",
                                     "min": 100,
                                     "max": 1000,
                                     "showStepMarkers": true,
@@ -469,6 +469,14 @@
                                     }
                                 },
                                 {
+                                    "name": "dnsServerForwarderIPAddressesHeader",
+                                    "type": "Microsoft.Common.TextBlock",
+                                    "visible": true,
+                                    "options": {
+                                        "text": "Forwarder IP Addresses"
+                                    }
+                                },
+                                {
                                     "name": "dnsServerForwarderIPAddresses",
                                     "type": "Microsoft.Common.EditableGrid",
                                     "ariaLabel": "Enter the IP address for the second Forwarder on the DNS Server.",
@@ -484,7 +492,7 @@
                                         "columns": [
                                             {
                                                 "id": "ipAddresses",
-                                                "header": "IP v4 Address",
+                                                "header": "IPv4 Address",
                                                 "width": "1fr",
                                                 "element": {
                                                     "type": "Microsoft.Common.TextBox",
