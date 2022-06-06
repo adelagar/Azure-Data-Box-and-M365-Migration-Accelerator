@@ -10,10 +10,10 @@ param BastionSubnetPrefix string = '10.230.1.0/27'
 param DnsServer bool = true
 
 @description('The IP address for the first Forwarder on the DNS Server.')
-param DnsServerForwarderIPAddress01 string
+param DnsServerForwarderIPAddress01 string = ''
 
 @description('The IP address for the second Forwarder on the DNS Server.')
-param DnsServerForwarderIPAddress02 string
+param DnsServerForwarderIPAddress02 string = ''
 
 @maxLength(15)
 @minLength(1)
