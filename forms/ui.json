@@ -518,10 +518,7 @@
                 "BastionInstanceName": "[steps('remoteAccess').bastion.bastionName]",
                 "BastionSubnetPrefix": "[steps('remoteAccess').bastion.bastionSubnetPrefix]",
                 "DnsServer": "[steps('storage').privateEndpointOptions.dnsServer]",
-                "DnsServerForwarderIPAddresses": [
-                    "[steps('storage').privateEndpointOptions.dnsServerForwarderIPAddresses1]",
-                    "[steps('storage').privateEndpointOptions.dnsServerForwarderIPAddresses2]"
-                ],
+                "DnsServerForwarderIPAddresses": "[steps('storage').privateEndpointOptions.dnsServerForwarderIPAddresses.ipAddresses]",
                 "DnsServerName": "[steps('storage').privateEndpointOptions.dnsServerName]",
                 "DnsServerSize": "[steps('storage').privateEndpointOptions.dnsServerSize]",
                 "FileShareName": "[steps('storage').azureFiles.fileShareName]",
