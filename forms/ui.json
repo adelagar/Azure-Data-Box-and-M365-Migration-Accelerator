@@ -469,7 +469,7 @@
                                     }
                                 },
                                 {
-                                    "name": "dnsServerForwarderIPAddresses1",
+                                    "name": "dnsServerForwarderIPAddress1",
                                     "type": "Microsoft.Common.TextBox",
                                     "label": "Forwarder IP Address 01",
                                     "defaultValue": "",
@@ -482,13 +482,13 @@
                                     "visible": "[equals (steps('storage').privateEndpointOptions.dnsServer, true)]"
                                 },
                                 {
-                                    "name": "dnsServerForwarderIPAddresses2",
+                                    "name": "dnsServerForwarderIPAddress2",
                                     "type": "Microsoft.Common.TextBox",
                                     "label": "Forwarder IP Address 02",
                                     "defaultValue": "",
                                     "toolTip": "Enter the IP address for the second Forwarder on the DNS Server.",
                                     "constraints": {
-                                        "required": true,
+                                        "required": false,
                                         "regex": "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$",
                                         "validationMessage": "This value must be an IP Address in version 4 format."
                                     },
@@ -505,10 +505,8 @@
                 "BastionInstanceName": "[steps('remoteAccess').bastion.bastionName]",
                 "BastionSubnetPrefix": "[steps('remoteAccess').bastion.bastionSubnetPrefix]",
                 "DnsServer": "[steps('storage').privateEndpointOptions.dnsServer]",
-                "DnsServerForwarderIPAddresses": [
-                    "[if(equals(steps('storage').privateEndpointOptions.dnsServer, true), steps('storage').privateEndpointOptions.dnsServerForwarderIPAddresses1, '168.63.129.16')]",
-                    "[if(equals(steps('storage').privateEndpointOptions.dnsServer, true), steps('storage').privateEndpointOptions.dnsServerForwarderIPAddresses2, '168.63.129.16')]"
-                ],
+                "DnsServerForwarderIPAddress01": "[if(equals(steps('storage').privateEndpointOptions.dnsServer, true), steps('storage').privateEndpointOptions.dnsServerForwarderIPAddress1, '')]",
+                "DnsServerForwarderIPAddress02": "[if(equals(steps('storage').privateEndpointOptions.dnsServer, true), steps('storage').privateEndpointOptions.dnsServerForwarderIPAddress2, '')]",
                 "DnsServerName": "[if(equals(steps('storage').privateEndpointOptions.dnsServer, true), steps('storage').privateEndpointOptions.dnsServerName, 'vmmgrtdns')]",
                 "DnsServerSize": "[if(equals(steps('storage').privateEndpointOptions.dnsServer, true), steps('storage').privateEndpointOptions.dnsServerSize, 'Standard_D2s_v4')]",
                 "FileShareName": "[steps('storage').azureFiles.fileShareName]",

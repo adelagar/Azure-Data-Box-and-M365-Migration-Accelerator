@@ -9,8 +9,11 @@ param BastionSubnetPrefix string = '10.230.1.0/27'
 @description('This value determines whether a DNS Server is deployed. The server will be configured with the appropriate conditional forwarder to support the Private Endpoint on Azure Files.  This is only needed if you will integrate your organizations\'s DNS with the solution.')
 param DnsServer bool = true
 
-@description('The IP address for the Forwarder on the DNS Server.')
-param DnsServerForwarderIPAddresses array
+@description('The IP address for the first Forwarder on the DNS Server.')
+param DnsServerForwarderIPAddress01 string
+
+@description('The IP address for the second Forwarder on the DNS Server.')
+param DnsServerForwarderIPAddress02 string
 
 @maxLength(15)
 @minLength(1)
@@ -108,6 +111,12 @@ param VMUsername string
 param VMPassword string
 
 var BastionPublicIpAddressName = '${BastionInstanceName}-pip'
+var DnsServerForwarderIPAddresses = empty(DnsServerForwarderIPAddress02) ? [
+  DnsServerForwarderIPAddress01
+] : [
+  DnsServerForwarderIPAddress01
+  DnsServerForwarderIPAddress02
+]
 var DnsServerNetworkAddress = split(JumpHostSubnetPrefix, '/')[0]
 var DnsServerOctet0 = split(DnsServerNetworkAddress, '.')[0]
 var DnsServerOctet1 = split(DnsServerNetworkAddress, '.')[1]
