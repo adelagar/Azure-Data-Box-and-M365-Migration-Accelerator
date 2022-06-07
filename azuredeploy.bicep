@@ -64,7 +64,7 @@ param GatewaySubnetPrefix string = '10.230.3.0/27'
 param RepositorySasToken string = ''
 
 @description('The URL to the repository for the code.  The default value may be used if deploying from GitHub.  However, if you network blocks public internet access or you would like to modify the code then you should host your own copy in a Azure Blobs.')
-param RepositoryUri string = 'https://raw.githubusercontent.com/jamasten/Azure-Data-Box-and-M365-Migration-Accelerator/main/'
+param RepositoryUri string = 'https://raw.githubusercontent.com/adelagar/Azure-Data-Box-and-M365-Migration-Accelerator/main/'
 
 @maxLength(24)
 @minLength(3)
