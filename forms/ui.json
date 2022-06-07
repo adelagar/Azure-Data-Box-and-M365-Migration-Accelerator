@@ -384,7 +384,7 @@
                                     "defaultValue": 100,
                                     "toolTip": "The size in GiB of the file share in Azure Files.",
                                     "min": 100,
-                                    "max": 1000,
+                                    "max": 100000,
                                     "showStepMarkers": true,
                                     "constraints": {
                                         "required": true
