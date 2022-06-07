@@ -28,7 +28,7 @@ param DnsServerSize string = 'Standard_D2s_v4'
 @description('The name of the file share in Azure Files.')
 param FileShareName string
 
-@maxValue(1000)
+@maxValue(100000)
 @minValue(100)
 @description('The size in GB of the file share in Azure Files.')
 param FileShareSize int = 100
@@ -193,8 +193,8 @@ resource virtualNetwork 'Microsoft.Network/virtualNetworks@2019-11-01' = {
         name: PrivateEndpointSubnetName
         properties: {
           addressPrefix: PrivateEndpointSubnetPrefix
-          privateEndpointNetworkPolicies: 'Enabled'
-          privateLinkServiceNetworkPolicies: 'Enabled'
+          privateEndpointNetworkPolicies: 'Disabled'
+          privateLinkServiceNetworkPolicies: 'Disabled'
         }
       }
       {

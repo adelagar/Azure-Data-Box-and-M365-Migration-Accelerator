@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.6.18.56646",
-      "templateHash": "15645951923465603056"
+      "templateHash": "2609055850931164937"
     }
   },
   "parameters": {
@@ -76,7 +76,7 @@
         "description": "The size in GB of the file share in Azure Files."
       },
       "minValue": 100,
-      "maxValue": 1000
+      "maxValue": 100000
     },
     "HybridUseBenefit": {
       "type": "string",
@@ -292,8 +292,8 @@
             "name": "[parameters('PrivateEndpointSubnetName')]",
             "properties": {
               "addressPrefix": "[parameters('PrivateEndpointSubnetPrefix')]",
-              "privateEndpointNetworkPolicies": "Enabled",
-              "privateLinkServiceNetworkPolicies": "Enabled"
+              "privateEndpointNetworkPolicies": "Disabled",
+              "privateLinkServiceNetworkPolicies": "Disabled"
             }
           },
           {
