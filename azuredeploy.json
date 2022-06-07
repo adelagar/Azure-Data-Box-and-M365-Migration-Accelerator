@@ -135,7 +135,7 @@
     },
     "RepositoryUri": {
       "type": "string",
-      "defaultValue": "https://raw.githubusercontent.com/jamasten/Azure-Data-Box-and-M365-Migration-Accelerator/main/",
+      "defaultValue": "https://raw.githubusercontent.com/adelagar/Azure-Data-Box-and-M365-Migration-Accelerator/main/",
       "metadata": {
         "description": "The URL to the repository for the code.  The default value may be used if deploying from GitHub.  However, if you network blocks public internet access or you would like to modify the code then you should host your own copy in a Azure Blobs."
       }
