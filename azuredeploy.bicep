@@ -20,6 +20,14 @@ param DnsServerForwarderIPAddress02 string = ''
 @description('The name of the Virtual Machine for the DNS server. Due to NETBIOS restrictions in Windows, this value must be 15 characters or shorter.')
 param DnsServerName string = 'vmdns'
 
+@allowed([
+  'Standard_D2s_v4'
+  'Standard_D4s_v4'
+  'Standard_D2s_v3'
+  'Standard_D4s_v3'
+  'Standard_DS2_v2'
+  'Standard_DS3_v2'
+])
 @description('The size of the virtual machine for the DNS server.')
 param DnsServerSize string = 'Standard_D2s_v4'
 
@@ -84,12 +92,15 @@ param VirtualNetworkAddressPrefix string = '10.230.0.0/21'
 
 
 @allowed([
-  'Standard_DS2_v2' // should this be changed to a v4 size? // add sizes that use accelerated networking
-  'Standard_DS3_v2' // should this be changed to a v4 size?
-  'Standard_D4as_v4'
+  'Standard_D2s_v4'
+  'Standard_D4s_v4'
+  'Standard_D2s_v3'
+  'Standard_D4s_v3'
+  'Standard_DS2_v2'
+  'Standard_DS3_v2'
 ])
 @description('The size of the virtual machines migrating your data.')
-param VMSize string = 'Standard_DS2_v2'
+param VMSize string = 'Standard_D4s_v4'
 
 @maxLength(14)
 @minLength(1)

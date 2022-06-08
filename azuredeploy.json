@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.6.18.56646",
-      "templateHash": "3904269165226648694"
+      "templateHash": "303492389697894158"
     }
   },
   "parameters": {
@@ -59,7 +59,15 @@
       "defaultValue": "Standard_D2s_v4",
       "metadata": {
         "description": "The size of the virtual machine for the DNS server."
-      }
+      },
+      "allowedValues": [
+        "Standard_D2s_v4",
+        "Standard_D4s_v4",
+        "Standard_D2s_v3",
+        "Standard_D4s_v3",
+        "Standard_DS2_v2",
+        "Standard_DS3_v2"
+      ]
     },
     "FileShareName": {
       "type": "string",
@@ -172,14 +180,17 @@
     },
     "VMSize": {
       "type": "string",
-      "defaultValue": "Standard_DS2_v2",
+      "defaultValue": "Standard_D4s_v4",
       "metadata": {
         "description": "The size of the virtual machines migrating your data."
       },
       "allowedValues": [
+        "Standard_D2s_v4",
+        "Standard_D4s_v4",
+        "Standard_D2s_v3",
+        "Standard_D4s_v3",
         "Standard_DS2_v2",
-        "Standard_DS3_v2",
-        "Standard_D4as_v4"
+        "Standard_DS3_v2"
       ]
     },
     "VMName": {
