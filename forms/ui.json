@@ -212,13 +212,18 @@
                                     "label": "VM Size",
                                     "toolTip": "Enter the size of the virtual machines migrating your data.",
                                     "recommendedSizes": [
-                                        "Standard_D4as_v4"
+                                        "Standard_D4s_v4",
+                                        "Standard_D4s_v3",
+                                        "Standard_DS3_v2"
                                     ],
                                     "constraints": {
                                         "allowedSizes": [
+                                            "Standard_D2s_v4",
+                                            "Standard_D4s_v4",
+                                            "Standard_D2s_v3",
+                                            "Standard_D4s_v3",
                                             "Standard_DS2_v2",
-                                            "Standard_DS3_v2",
-                                            "Standard_D4as_v4"
+                                            "Standard_DS3_v2"
                                         ]
                                     },
                                     "imageReference": {
@@ -451,10 +456,19 @@
                                     "label": "VM Size",
                                     "toolTip": "Enter the size of the virtual machine for the DNS server.",
                                     "recommendedSizes": [
-                                        "Standard_D2s_v4"
+                                        "Standard_D2s_v4",
+                                        "Standard_D2s_v3",
+                                        "Standard_DS2_v2"
                                     ],
                                     "constraints": {
-                                        "allowedSizes": []
+                                        "allowedSizes": [
+                                            "Standard_D2s_v4",
+                                            "Standard_D4s_v4",
+                                            "Standard_D2s_v3",
+                                            "Standard_D4s_v3",
+                                            "Standard_DS2_v2",
+                                            "Standard_DS3_v2"
+                                        ]
                                     },
                                     "imageReference": {
                                         "publisher": "MicrosoftWindowsServer",
