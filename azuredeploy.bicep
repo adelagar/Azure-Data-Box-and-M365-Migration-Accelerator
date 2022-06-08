@@ -353,7 +353,7 @@ resource networkInterface_DnsServer 'Microsoft.Network/networkInterfaces@2020-05
         }
       }
     ]
-    enableAcceleratedNetworking: false
+    enableAcceleratedNetworking: true
     enableIPForwarding: false
   }
 }
@@ -459,6 +459,7 @@ resource networkInterfaces_MigrationServers 'Microsoft.Network/networkInterfaces
         }
       }
     ]
+    enableAcceleratedNetworking: true
   }
   dependsOn: [
     dscExtension_DnsServer

@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.6.18.56646",
-      "templateHash": "2609055850931164937"
+      "templateHash": "3904269165226648694"
     }
   },
   "parameters": {
@@ -484,7 +484,7 @@
             }
           }
         ],
-        "enableAcceleratedNetworking": false,
+        "enableAcceleratedNetworking": true,
         "enableIPForwarding": false
       },
       "dependsOn": [
@@ -606,7 +606,8 @@
               }
             }
           }
-        ]
+        ],
+        "enableAcceleratedNetworking": true
       },
       "dependsOn": [
         "[resourceId('Microsoft.Compute/virtualMachines/extensions', parameters('DnsServerName'), 'DSC')]",
