@@ -32,6 +32,8 @@ The following are the benefits that could be gained from the proposed program
 
 Below please find the solution accelerator deployment buttons for either Azure Commercial or Azure US Government. Please note that the inputs within the JSON template can be changed based on you particular scenario. We are also adding a dash and an ordinal number to the virtual machine hostname. Example if you were to deploy two virtual machines they would appear in your Azure subscription as M365-MIGVM-1 and M365-MIGVM-2. The hostnames can be whatever you want to comply with your naming standards. Please be aware that you are limited to 15 characters for the virtual machine hostname. You have the option to deploy multiple virtual machines per your requirements.  
 
+[website]: https://youtu.be/sZ3s3GTlZi4
+
 **High Level Azure Migration Factory Deployment Solution Overview**
 
 Below please find a graphic depicting what the output of the depolyment into an Azure subscription would look like. In this scenario we just deployed three virtual machines, a storage account, a virtual network, a network security group, and a route table. Please note the M365 Migration Manager still needs to be deployed on the virtual machine.
